@@ -1,5 +1,10 @@
 ---
+import EvidenceStamp from './EvidenceStamp.astro';
 import { about } from '../lib/data';
+interface Props {
+  detailed?: boolean;
+}
+const { detailed = false } = Astro.props;
 ---
 
 <ul class="exp">
@@ -17,6 +22,16 @@ import { about } from '../lib/data';
           )}
         </span>
         <span>{e.org}</span>
+        {detailed && e.points && (
+          <div class="exp__points">
+            <ul>
+              {e.points.map((pt) => (
+                <li>{pt}</li>
+              ))}
+            </ul>
+            {e.evidence && <EvidenceStamp evidenceId={e.evidence} />}
+          </div>
+        )}
       </li>
     ))
   }
@@ -38,10 +53,34 @@ import { about } from '../lib/data';
   .exp__role {
     font-weight: 600;
   }
+  .exp__points {
+    grid-column: 2 / -1;
+    display: grid;
+    gap: var(--space-3);
+    justify-items: start;
+    font-size: 16px;
+    max-width: 78ch;
+  }
+  .exp__points ul {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .exp__points li {
+    padding-left: 1.2em;
+    text-indent: -1.2em;
+  }
+  .exp__points li::before {
+    content: '— ';
+    color: var(--graphite);
+  }
   @media (max-width: 767px) {
     .exp__row {
       grid-template-columns: 1fr;
       gap: var(--space-1);
+    }
+    .exp__points {
+      grid-column: 1;
+      margin-top: var(--space-2);
     }
   }
 </style>

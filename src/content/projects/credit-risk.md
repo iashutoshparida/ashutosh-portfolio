@@ -15,7 +15,7 @@ repos:
 summary:
   question: Build a probability-of-default model the way a model-risk team would review it.
   approach: Champion and challenger models, out-of-time testing, calibration, a points scorecard, stress scenarios and a validation report.
-  outcome: The champion held up out of time; stress scenarios more than doubled expected loss.
+  outcome: The champion kept its ranking power out of time but under-predicted 2025 defaults; stress scenarios more than doubled expected loss.
 metrics:
   - id: oot-auc
     label: Out-of-time AUC, champion vs challenger

@@ -95,13 +95,23 @@ describe.skipIf(!built)('rendered site (run after `npm run build`)', () => {
 
   it('rule 4: placeholders render visibly and never become links', () => {
     for (const { f, s } of html) {
-      expect(s, f).not.toMatch(/mailto:/);
       expect(s, f).not.toMatch(/href="[^"]*PLACEHOLDER/);
+      for (const m of s.matchAll(/href="mailto:([^"]*)"/g)) {
+        expect(site.contact.email.placeholder, `mailto while email is a placeholder in ${f}`).toBe(false);
+        expect(m[1], f).toBe(site.contact.email.value);
+      }
     }
     const home = text(page(''));
     for (const k of ['email', 'linkedin', 'cv'] as const) {
       if (site.contact[k].placeholder) expect(home).toContain(site.contact[k].display);
     }
+  });
+
+  it('every resume bullet block carries an evidence label', () => {
+    const t = text(page('about'));
+    const n = about.experience.filter((e) => e.points?.length).length;
+    expect((t.match(/SELF-REPORTED/g) ?? []).length).toBeGreaterThanOrEqual(n);
+    for (const e of about.experience) for (const pt of e.points ?? []) expect(t).toContain(pt);
   });
 
   it('rule 5: pending roles show a visible marker', () => {
@@ -113,21 +123,31 @@ describe.skipIf(!built)('rendered site (run after `npm run build`)', () => {
   });
 
   it('rule 6: banned strings are absent from HTML and client JS', () => {
+    // Owner decision 2026-11-11: Rungta work (MechanicSaathi, RV-Vision) may appear on /about/ as SELF-REPORTED,
+    // and the owner's own email and phone may be published. SafarSaathi and AI Compounder stay excluded.
+    const approvedEmail = site.contact.email.placeholder ? null : site.contact.email.value;
     const banned: [RegExp, string][] = [
-      [/(^|[^0-9.])(68|61|46|84)%/, 'Digital Mirror survey statistics (D6)'],
       [/Agentic AI Product Intern/i, 'unverified title (D7)'],
       [/Hyderabad, India/, 'location string'],
       [/0 hallucinations/i, 'unsupported claim'],
       [/~4s/, 'unsupported claim'],
       [/504 chunks/i, 'unsupported claim'],
       [/HIPAA/, 'unsupported claim'],
-      [/Mechanic[ -]?Saathi|Safar[ -]?Saathi|AI[ -]Compounder|rv-vision/i, 'Rungta-era project (D7)'],
+      [/Safar[ -]?Saathi|AI[ -]Compounder/i, 'excluded Rungta-era project (D7)'],
       [/physics for fun/i, 'removed copy'],
-      [/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/, 'email address (D5)'],
     ];
-    for (const { f, s } of [...html.map((h) => ({ f: h.f, s: text(h.s) })), ...js]) {
+    const emailRe = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+    for (const { f, s } of [...html.map((h) => ({ f: h.f, s: text(h.s) + ' ' + h.s })), ...js]) {
       for (const [re, why] of banned) expect(re.test(s), `${why} in ${f}`).toBe(false);
+      const emails = [...s.matchAll(emailRe)].map((m) => m[0]).filter((e) => e !== approvedEmail);
+      expect(emails, `unapproved email address in ${f}`).toEqual([]);
     }
+    // D6: the withheld Digital Mirror survey percentages must not appear outside the About page's resume bullets.
+    for (const { f, s } of html.filter((h) => !h.f.includes('/about/'))) {
+      expect(/(^|[^0-9.])(68|61|46|84)%/.test(text(s)), `Digital Mirror statistic (D6) in ${f}`).toBe(false);
+    }
+    expect(/(^|[^0-9.])(68|46)%/.test(text(page('about'))), 'D6 statistic on /about/').toBe(false);
+    expect(text(page('work/digital-mirror'))).not.toMatch(/(^|[^0-9.])(68|61|46|84)%/);
   });
 
   it('number audit: every data-claim number exists in content or instrument display strings', () => {

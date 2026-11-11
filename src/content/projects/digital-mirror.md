@@ -24,7 +24,7 @@ metrics:
     label: Survey responses
     value: "57"
     evidence: primary-research
-    method: Online survey on screen-time habits and reactions to existing digital-wellbeing tools.
+    method: Survey on screen-time habits and reactions to existing digital-wellbeing tools.
     source: null
 instrument: { id: digital-mirror-scrollytelling, data: null, release: v1.1 }
 build_note: Product concept from the NextLeap PM Fellowship. Not implemented.
@@ -34,7 +34,7 @@ build_note: Product concept from the NextLeap PM Fellowship. Not implemented.
 Phones already tell people how many hours they spent on each app. People feel judged, and they switch the feature off. What would actually help someone who wants to scroll less at night?
 
 ## Stakes
-Digital wellbeing sits in a settings menu almost no one opens twice. A feature people trust could become a daily companion instead of a weekly scolding.
+Digital wellbeing is hidden in a settings menu. A feature people trust could become a daily companion instead of a weekly scolding.
 
 ## Research
 A survey with 57 responses and two personas: the late-night scroller who opens the phone for one message and loses 45 minutes, and the autopilot scroller who cannot tell useful time from empty time.

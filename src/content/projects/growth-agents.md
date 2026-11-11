@@ -72,7 +72,7 @@ For a mobile game studio, user acquisition is usually the biggest cost line. Ret
 
 ## System
 - **Analyst** turns cohorts with three days of play into predicted 30-day revenue per channel, using a LightGBM pLTV model.
-- **Planner** proposes tomorrow's split with Thompson sampling and writes a one-line rationale.
+- **Planner** proposes tomorrow's split with Thompson sampling and writes a one-line rationale (template text in the replayed run, not an LLM).
 - **Critic** applies hard guardrails: a daily budget ceiling, at most ±20% change per channel per day, at least 5% per channel, and human approval for any day that moves more than 8% of the budget.
 - **CreativeLab** applies the same discipline to ads: plan 40 variants, write copy, reject policy breaks, score with an XGBoost CTR model, test the top 8 with a bandit.
 

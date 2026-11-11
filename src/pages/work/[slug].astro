@@ -107,7 +107,7 @@ const citations = p.slug === 'pressure-vit' ? PRESSURE_MAT : [];
                     height={1047}
                     maxWidth={520}
                     alt="Attention rollout for one held-out person, in three postures (supine, right, left). Top row: mean pressure maps showing the body outline. Bottom row: how much attention each image patch receives; the values are spread fairly evenly across patches."
-                    caption="Attention rollout for one held-out person. Top: mean pressure per posture. Bottom: attention per patch. It is spread fairly evenly, so treat it as a diagnostic, not as proof of what the model learned."
+                    caption="Attention rollout of the 3-posture model for one held-out person. Top: mean pressure per posture. Bottom: attention per patch. It is spread fairly evenly, so treat it as a diagnostic, not as proof of what the model learned."
                     evidenceId="public-data"
                   />
                 )}
@@ -146,7 +146,7 @@ const citations = p.slug === 'pressure-vit' ? PRESSURE_MAT : [];
                 src="credit-risk/calibration"
                 width={1275}
                 height={884}
-                alt="Calibration plot by predicted-risk decile. Observed default rates follow the perfect-calibration line at low predicted risk and sit above it in the two highest-risk deciles."
+                alt="Calibration plot by predicted-risk decile. Observed default rates follow the perfect-calibration line at low predicted risk and sit above it from the middle deciles up, most of all in the top two."
                 caption="Calibration by predicted-risk decile, on synthetic loans."
                 evidenceId="synthetic"
               />

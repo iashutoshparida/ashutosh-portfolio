@@ -24,3 +24,6 @@
 - id: primary-research
   label: PRIMARY RESEARCH
   definition: Collected by me directly (for example, a survey I ran).
+- id: self-reported
+  label: SELF-REPORTED
+  definition: Stated by me. No public code or data on this site reproduces it yet.

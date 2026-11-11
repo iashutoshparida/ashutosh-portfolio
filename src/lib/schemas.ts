@@ -11,6 +11,7 @@ export const EvidenceId = z.enum([
   'team',
   'course-research',
   'primary-research',
+  'self-reported',
 ]);
 export type EvidenceId = z.infer<typeof EvidenceId>;
 
@@ -103,6 +104,7 @@ export const Site = z.object({
     linkedin: ContactLink,
     github: ContactLink,
     cv: ContactLink,
+    phone: ContactLink.optional(),
   }),
   footer: z.object({ build_note: z.string(), updated: z.string() }),
 });
@@ -115,13 +117,22 @@ export const About = z.object({
   bio: z.string(),
   how_i_work: z.array(z.object({ title: z.string(), text: z.string() })).length(3),
   experience: z.array(
-    z.object({ dates: z.string(), role: z.string(), org: z.string(), pending: z.boolean().optional() }),
+    z.object({
+      dates: z.string(),
+      role: z.string(),
+      org: z.string(),
+      pending: z.boolean().optional(),
+      points: z.array(z.string()).optional(),
+      evidence: EvidenceId.optional(),
+    }),
   ),
   education: z.array(z.object({ dates: z.string(), degree: z.string(), org: z.string() })),
   programmes: z.array(z.object({ title: z.string(), org: z.string() })),
   leadership: z.array(
     z.object({ dates: z.string().nullable(), role: z.string(), org: z.string(), note: z.string().optional() }),
   ),
+  achievements: z.array(z.object({ text: z.string(), href: z.string().optional() })).optional(),
+  skills: z.array(z.object({ group: z.string(), items: z.string() })).optional(),
   off_the_clock: z.array(z.string()),
 });
 export type About = z.infer<typeof About>;

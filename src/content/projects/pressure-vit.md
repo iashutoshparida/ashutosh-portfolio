@@ -46,7 +46,7 @@ metrics:
     method: Parameter count recomputed from the model definition.
     source: https://github.com/iashutoshparida/pressure-vit
 instrument: { id: pressure-vit-leakage-toggle, data: data/pressure-vit-leakage.json, release: v1 }
-build_note: Built with an AI coding agent. Every reported number reproduces from the committed results file; 9 tests pass.
+build_note: Built with an AI coding agent. Every reported number matches the committed results file; 9 tests pass.
 ---
 
 ## Question

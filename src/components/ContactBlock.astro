@@ -16,8 +16,8 @@ const c = site.contact;
         {c.email.display}
       </p>
     ) : (
-      <a class="contact__email" href={`mailto:${c.email.value}`}>
-        {c.email.value} ↗
+      <a class="contact__email contact__email--real" href={`mailto:${c.email.value}`}>
+        {c.email.value}
       </a>
     )
   }
@@ -35,6 +35,7 @@ const c = site.contact;
     <span class="visually-hidden" aria-live="polite" data-copy-status></span>
   </div>
   <ul class="contact__links">
+    {c.phone && !c.phone.placeholder && <li><a class="t-label link-u" href={`tel:${c.phone.value}`}>{c.phone.display}</a></li>}
     <li><a class="t-label link-u" href={c.github.value} rel="noopener">GitHub ↗</a></li>
     <li>{c.linkedin.placeholder ? <span class="t-label graphite">{c.linkedin.display}</span> : <a class="t-label link-u" href={c.linkedin.value} rel="noopener">LinkedIn ↗</a>}</li>
     <li>{c.cv.placeholder ? <span class="t-label graphite">{c.cv.display}</span> : <a class="t-label link-u" href={c.cv.value}>CV ↓</a>}</li>
@@ -57,6 +58,13 @@ const c = site.contact;
     letter-spacing: -0.02em;
     text-transform: uppercase;
     overflow-wrap: anywhere;
+  }
+  .contact__email--real {
+    text-transform: none;
+    font-size: clamp(30px, 5vw, 84px);
+  }
+  .contact__email--real:hover {
+    color: var(--signal);
   }
   .contact--compact .contact__email {
     font-size: clamp(28px, 3.6vw, 54px);

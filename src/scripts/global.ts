@@ -109,15 +109,27 @@ document.querySelectorAll<HTMLButtonElement>('button[data-copy]').forEach((btn) 
   btn.addEventListener('click', async () => {
     const value = btn.dataset.copy;
     if (!value) return;
+    let ok = false;
     try {
       await navigator.clipboard.writeText(value);
-      const label = btn.textContent;
-      btn.textContent = 'COPIED';
-      const status = btn.parentElement?.querySelector('[data-copy-status]');
-      if (status) status.textContent = 'Email address copied';
-      setTimeout(() => (btn.textContent = label), 1500);
+      ok = true;
     } catch {
-      /* clipboard unavailable: the address is visible on the page */
+      // Fallback for browsers or contexts without the async clipboard API.
+      const ta = document.createElement('textarea');
+      ta.value = value;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+      document.body.appendChild(ta);
+      ta.select();
+      ok = document.execCommand('copy');
+      ta.remove();
+      btn.focus();
     }
+    if (!ok) return; // the address stays visible on the page
+    const label = btn.textContent;
+    btn.textContent = 'Copied';
+    const status = btn.parentElement?.querySelector('[data-copy-status]');
+    if (status) status.textContent = 'Email address copied';
+    setTimeout(() => (btn.textContent = label), 1500);
   });
 });

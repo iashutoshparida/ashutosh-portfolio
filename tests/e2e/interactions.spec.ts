@@ -162,7 +162,7 @@ test.describe('I-7 contents sheet', () => {
     await btn.click();
     const sheet = page.getByRole('dialog');
     await expect(sheet).toBeVisible();
-    await expect(sheet).toContainText('[Email: placeholder]');
+    await expect(sheet.getByRole('link', { name: /Email/ })).toHaveAttribute('href', /^mailto:/);
     await expect(sheet).toContainText('CV [placeholder]');
     await page.keyboard.press('Escape');
     await expect(sheet).toBeHidden();
@@ -171,10 +171,18 @@ test.describe('I-7 contents sheet', () => {
 });
 
 test.describe('I-8 contact', () => {
-  test('8.2 placeholder email, disabled copy, no mailto', async ({ page }) => {
+  test('8.3 copy puts the address on the clipboard and announces it', async ({ page, context, browserName }) => {
+    test.skip(browserName !== 'chromium', 'clipboard permissions are Chromium-only in Playwright');
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.goto('/');
-    await expect(page.locator('#contact')).toContainText('[Email: placeholder]');
-    await expect(page.locator('#contact').getByRole('button', { name: /copy/i })).toBeDisabled();
-    expect(await page.locator('a[href^="mailto:"]').count()).toBe(0);
+    const block = page.locator('#contact');
+    const email = (await block.locator('a[href^="mailto:"]').first().getAttribute('href'))!.replace('mailto:', '');
+    const btn = block.locator('button[data-copy]');
+    await btn.scrollIntoViewIfNeeded();
+    await btn.click();
+    await expect(btn).toHaveText(/copied/i);
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(email);
+    await expect(block.locator('[data-copy-status]')).not.toBeEmpty();
+    await expect(block).toContainText('CV [placeholder]');
   });
 });

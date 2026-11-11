@@ -39,7 +39,7 @@ ALL_BROWSERS=1 npx playwright test # adds WebKit and Firefox
 
 Change the Markdown/YAML in `src/content/`, then `npm run build && npm test`. The tests fail if a number on the page cannot be traced to a content or data file, if a metric has no evidence label, or if a placeholder turns into a link.
 
-Placeholders that still need the owner: email, LinkedIn URL and CV in `src/content/site.yaml`; one pending role title in `src/content/about.md`.
+Open owner items are listed in `CHANGE_REQUESTS.md`.
 
 ## Licences
 

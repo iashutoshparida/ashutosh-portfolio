@@ -27,7 +27,7 @@ const c = site.contact;
           ))
         }
       </ul>
-      <a class="btn" href="#contact">Email ↗</a>
+      {c.email.placeholder ? <a class="btn" href="#contact">Email</a> : <a class="btn" href={`mailto:${c.email.value}`}>Email ↗</a>}
     </nav>
     <button class="btn contents-btn" type="button" aria-haspopup="dialog" aria-controls="contents-sheet" data-contents-open>
       Contents
@@ -55,7 +55,7 @@ const c = site.contact;
         }
       </ol>
       <div class="contents-sheet__contact">
-        <span class="btn btn--placeholder" aria-disabled="true">{c.email.placeholder ? c.email.display : 'Email'}</span>
+        {c.email.placeholder ? <span class="btn btn--placeholder" aria-disabled="true">{c.email.display}</span> : <a class="btn" href={`mailto:${c.email.value}`}>Email ↗</a>}
         {c.cv.placeholder ? <span class="btn btn--placeholder">{c.cv.display}</span> : <a class="btn" href={c.cv.value}>CV ↓</a>}
         <a class="btn" href={c.github.value} rel="noopener">GitHub ↗</a>
       </div>

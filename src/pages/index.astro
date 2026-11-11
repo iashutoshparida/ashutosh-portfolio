@@ -117,7 +117,12 @@ const c = site.contact;
     <section class="section grid" aria-labelledby="off-h">
       <h2 class="lane-margin t-label" id="off-h">06 — Off the clock</h2>
       <ul class="lane-wide off">
-        {sportsSec && <li>{sportsSec.role}, {sportsSec.org}. {sportsSec.note}</li>}
+        {sportsSec && (
+          <li>
+            {sportsSec.role}, {sportsSec.org}. {sportsSec.note}{' '}
+            {/\d/.test(sportsSec.note ?? '') && <EvidenceStamp evidenceId="self-reported" />}
+          </li>
+        )}
         {about.off_the_clock.map((o) => <li>{o}</li>)}
       </ul>
     </section>

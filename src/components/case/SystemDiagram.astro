@@ -13,7 +13,7 @@ const diagrams: Record<string, Diagram> = {
     lanes: [
       {
         nodes: [
-          { k: 'Input', t: 'Pressure map', d: 'One frame from the mat under the mattress' },
+          { k: 'Input', t: 'Pressure map', d: 'One frame from a bed’s pressure mat' },
           { k: 'Embed', t: 'Patches + position', d: 'Patch embedding with positional information' },
           { k: 'Model', t: 'Transformer encoder', d: '141,457 parameters, written from scratch' },
           { k: 'Output', t: '17 positions', d: 'Also a 3-posture variant' },
@@ -45,7 +45,7 @@ const diagrams: Record<string, Diagram> = {
         label: 'Opening a PR',
         nodes: [
           { k: 'PR Risk Analyzer', t: '18 explainable rules', d: 'Unsafe calls, signature changes with callers, deep nesting…' },
-          { k: 'Output', t: 'Reviewer-facing comment', d: 'Runs as a GitHub Action' },
+          { k: 'Output', t: 'One reviewer comment', d: 'Packaged as a GitHub Action; not yet run live' },
         ],
       },
       {
@@ -65,9 +65,9 @@ const diagrams: Record<string, Diagram> = {
         label: 'GrowthPilot',
         nodes: [
           { k: 'Analyst', t: 'Predicted 30-day revenue', d: 'LightGBM pLTV on cohorts with 3 days of play' },
-          { k: 'Planner', t: 'Tomorrow’s split + rationale', d: 'Thompson sampling' },
+          { k: 'Planner', t: 'Tomorrow’s split + rationale', d: 'Thompson sampling; template rationale in the replay' },
           { k: 'Critic', t: 'Hard guardrails', d: 'Daily ceiling · ±20% per channel · ≥5% per channel', flag: true },
-          { k: 'Human', t: 'Approval if >8% of budget moves', flag: true },
+          { k: 'Human', t: 'Approval if >8% of budget moves', d: 'Simulated: always approves', flag: true },
         ],
       },
       {

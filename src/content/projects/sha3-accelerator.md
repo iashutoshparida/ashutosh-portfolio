@@ -23,6 +23,6 @@ metrics:
     evidence: verified
     method: Self-checking Icarus Verilog testbenches compare digests with the NIST reference values.
     source: https://github.com/iashutoshparida/SHA-3-Hardware-Accelerator-with-AXI4-Lite-SoC-Integration
-build_note: "Per the repository README, the SHA-3 core is my project work; the integration wrappers, testbenches, demo programs and documentation were produced in a separate integration exercise [HOW THEY WERE PRODUCED: PENDING CONFIRMATION]. Resource and timing figures are not shown until synthesis reports are committed."
+build_note: "The SHA-3 core RTL is my project work; credit for the integration wrappers and testbenches is pending confirmation. Resource and timing figures are not shown until synthesis reports are committed."
 ---
-Misses: simulation only; no committed synthesis or timing reports.
+Misses: simulation only; single-block messages (up to 1088 bits) only; no committed synthesis or timing reports.

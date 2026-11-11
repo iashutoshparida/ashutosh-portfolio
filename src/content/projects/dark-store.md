@@ -29,6 +29,6 @@ metrics:
     evidence: simulation
     method: Replenishment policies simulated over the backtest period with expiry and lead-time assumptions stated in the repo.
     source: https://github.com/iashutoshparida/dark-store-scm-analytics
-build_note: Built with an AI coding agent; numbers reproduce from the committed reports.
+build_note: Built with an AI coding agent; numbers match the committed report files.
 ---
 Misses: simulated policy outcomes on public retail data, not a real dark store; no charts committed yet.

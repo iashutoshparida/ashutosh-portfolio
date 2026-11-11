@@ -79,7 +79,7 @@ Reviewer attention and trust in CI are scarce. When teams stop trusting a red bu
 
 ## System
 - **CodePilot** parses the code, builds call graphs, finds functions no test protects, and generates tests. Generated tests are kept only if they are safe, pass against the unmodified code and are stable across repeated runs. An LLM is optional and always verified, never trusted.
-- **PR Risk Analyzer** scores a pull request with 18 explainable rules (unsafe calls, signature changes with callers, deep nesting and more) and posts a reviewer-facing comment. It runs as a GitHub Action.
+- **PR Risk Analyzer** scores a pull request with 18 explainable rules (unsafe calls, signature changes with callers, deep nesting and more) and is packaged as a GitHub Action that posts one reviewer comment (not yet run live on a real repository).
 - **TestLedger** stores every test result from CI over time, scores flakiness from flip patterns, and quarantines flaky tests automatically while keeping real regressions visible.
 
 ## Proof

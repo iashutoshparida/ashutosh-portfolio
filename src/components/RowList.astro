@@ -1,10 +1,13 @@
 ---
+import EvidenceStamp from './EvidenceStamp.astro';
+import type { EvidenceId } from '../lib/schemas';
 // Dates · main · org rows, the same grid as ExperienceList.
 interface Row {
   dates?: string | null;
   main: string;
   org: string;
   note?: string;
+  evidence?: EvidenceId;
 }
 interface Props {
   rows: Row[];
@@ -20,6 +23,7 @@ const { rows } = Astro.props;
         <span class="rows__main">
           {r.main}
           {r.note && <span class="rows__note graphite"> {r.note}</span>}
+          {r.evidence && <> <EvidenceStamp evidenceId={r.evidence} /></>}
         </span>
         <span>{r.org}</span>
       </li>

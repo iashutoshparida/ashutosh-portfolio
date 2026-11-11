@@ -22,7 +22,7 @@ export const PRESSURE_MAT: Citation[] = [
 export const OTHER_DATA: (Citation & { used: string })[] = [
   {
     used: 'Dark-store supply chain',
-    text: 'M5 Forecasting competition data (Walmart US sales, 2014–2016), Kaggle.',
+    text: 'M5 Forecasting competition data (Walmart US daily sales, 2011–2016; this project uses 2014–2016), Kaggle.',
     url: 'https://www.kaggle.com/competitions/m5-forecasting-accuracy',
   },
   {

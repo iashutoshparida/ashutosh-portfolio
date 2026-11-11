@@ -3,7 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import ExperienceList from '../components/ExperienceList.astro';
 import RowList from '../components/RowList.astro';
-import { about, site } from '../lib/data';
+import EvidenceStamp from '../components/EvidenceStamp.astro';
+import { about, site, href } from '../lib/data';
 ---
 
 <BaseLayout
@@ -44,7 +45,8 @@ import { about, site } from '../lib/data';
 
     <section class="section" aria-labelledby="exp-h">
       <h2 class="t-label sec-h" id="exp-h">Experience</h2>
-      <ExperienceList />
+      <ExperienceList detailed />
+      <p class="t-small graphite exp-note">Role details are from my resume. Numbers marked SELF-REPORTED have no public code or data on this site yet.</p>
     </section>
 
     <section class="section" aria-labelledby="edu-h">
@@ -54,9 +56,46 @@ import { about, site } from '../lib/data';
       <RowList rows={about.programmes.map((p) => ({ dates: null, main: p.title, org: p.org }))} />
     </section>
 
+    {
+      about.skills && (
+        <section class="section" aria-labelledby="skills-h">
+          <h2 class="t-label sec-h" id="skills-h">Skills</h2>
+          <dl class="skills">
+            {about.skills.map((g) => (
+              <div class="skills__row">
+                <dt class="t-label">{g.group}</dt>
+                <dd>{g.items}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )
+    }
+
     <section class="section" aria-labelledby="lead-h">
       <h2 class="t-label sec-h" id="lead-h">Leadership</h2>
-      <RowList rows={about.leadership.map((l) => ({ dates: l.dates, main: l.role, org: l.org, note: l.note }))} />
+      <RowList rows={about.leadership.map((l) => ({ dates: l.dates, main: l.role, org: l.org, note: l.note, evidence: /\d/.test(l.note ?? '') ? ('self-reported' as const) : undefined }))} />
+      {
+        about.achievements && (
+          <>
+            <h3 class="t-label sec-h sec-h--sub">Achievements</h3>
+            <ul class="ach">
+              {about.achievements.map((a) => (
+                <li>
+                  {a.href ? (
+                    <a class="link-u" href={href(a.href)}>
+                      {a.text} →
+                    </a>
+                  ) : (
+                    a.text
+                  )}{' '}
+                  <EvidenceStamp evidenceId="self-reported" />
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
     </section>
 
     <section class="section grid" aria-labelledby="off-h">
@@ -106,13 +145,30 @@ import { about, site } from '../lib/data';
     text-transform: uppercase;
     line-height: 1;
   }
+  .exp-note {
+    margin-top: var(--space-4);
+  }
+  .skills__row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-bottom: var(--rule-soft);
+    align-items: baseline;
+  }
+  .ach {
+    display: grid;
+    gap: var(--space-3);
+    font-size: 18px;
+  }
   .off {
     display: grid;
     gap: var(--space-3);
     font-size: 20px;
   }
   @media (max-width: 767px) {
-    .principles {
+    .principles,
+    .skills__row {
       grid-template-columns: 1fr;
     }
     .bio {
