@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import RowList from '../components/RowList.astro';
+import { about, site } from '../lib/data';
+---
+
+<BaseLayout
+  title="About"
+  current="about"
+  og="about"
+  description="Ashutosh Parida: AI engineer, product builder and creative technologist, studying Physics and Electronics & Instrumentation at BITS Pilani."
+>
+  <div class="wrap">
+    <PageHead kicker="03 · About" title={site.name}>
+      <p class="t-statement about-statement">
+        {site.statement[0]} <span class="graphite">{site.statement[1]} {site.statement[2]}</span>
+      </p>
+    </PageHead>
+
+    <section class="section grid" aria-labelledby="bio-h">
+      <h2 class="lane-margin t-label" id="bio-h">Bio</h2>
+      <p class="lane-text bio">{about.bio}</p>
+      <ul class="lane-aside t-label descriptor">
+        {site.descriptor.map((d) => <li>{d}</li>)}
+        <li class="graphite">{site.institution_line}</li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="how-h">
+      <h2 class="t-label sec-h" id="how-h">How I work</h2>
+      <div class="principles">
+        {
+          about.how_i_work.map((p) => (
+            <div class="principle">
+              <h3 class="principle__title">{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="exp-h">
+      <h2 class="t-label sec-h" id="exp-h">Experience</h2>
+      <ExperienceList />
+    </section>
+
+    <section class="section" aria-labelledby="edu-h">
+      <h2 class="t-label sec-h" id="edu-h">Education</h2>
+      <RowList rows={about.education.map((e) => ({ dates: e.dates, main: e.degree, org: e.org }))} />
+      <h3 class="t-label sec-h sec-h--sub">Programmes</h3>
+      <RowList rows={about.programmes.map((p) => ({ dates: null, main: p.title, org: p.org }))} />
+    </section>
+
+    <section class="section" aria-labelledby="lead-h">
+      <h2 class="t-label sec-h" id="lead-h">Leadership</h2>
+      <RowList rows={about.leadership.map((l) => ({ dates: l.dates, main: l.role, org: l.org, note: l.note }))} />
+    </section>
+
+    <section class="section grid" aria-labelledby="off-h">
+      <h2 class="lane-margin t-label" id="off-h">Off the clock</h2>
+      <ul class="lane-text off">
+        {about.off_the_clock.map((o) => <li>{o}</li>)}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-statement {
+    max-width: 24ch;
+  }
+  .bio {
+    font-size: 22px;
+    line-height: 1.45;
+  }
+  .descriptor {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+  }
+  .sec-h {
+    margin-bottom: var(--space-5);
+  }
+  .sec-h--sub {
+    margin-top: var(--space-7);
+  }
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+  .principle {
+    border-top: var(--rule);
+    padding-top: var(--space-4);
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+  .principle__title {
+    font-size: 28px;
+    font-weight: 800;
+    font-stretch: 75%;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .off {
+    display: grid;
+    gap: var(--space-3);
+    font-size: 20px;
+  }
+  @media (max-width: 767px) {
+    .principles {
+      grid-template-columns: 1fr;
+    }
+    .bio {
+      font-size: 19px;
+    }
+  }
+</style>

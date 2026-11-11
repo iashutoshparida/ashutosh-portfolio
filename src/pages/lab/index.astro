@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHead from '../../components/PageHead.astro';
+import EvidenceStamp from '../../components/EvidenceStamp.astro';
+import { getLab, experiments, writing, href } from '../../lib/data';
+const lab = await getLab();
+---
+
+<BaseLayout
+  title="Lab"
+  current="lab"
+  og="lab"
+  description="Supervised physics research projects at BITS Pilani, smaller experiments and product teardowns by Ashutosh Parida."
+>
+  <div class="wrap">
+    <PageHead
+      kicker="02 · Lab"
+      title="Lab"
+      lede="Supervised research from my physics degree, smaller experiments, and product writing. Less polished than the reports, labelled just as carefully."
+    />
+
+    <section class="section" aria-labelledby="research-h">
+      <h2 class="t-label lab-h" id="research-h">Research</h2>
+      <ul class="cards">
+        {
+          lab.map((l) => (
+            <li class="card">
+              <p class="card__meta">
+                <EvidenceStamp evidenceId={l.data.evidence} />
+                <span class="t-label graphite">{l.data.course.split(',')[0]}</span>
+              </p>
+              <h3 class="card__title">
+                <a href={href(`/lab/${l.data.slug}/`)}>{l.data.title}</a>
+              </h3>
+              <p>{l.data.question}</p>
+              <p class="t-small graphite">
+                Supervised by {l.data.supervisor}
+                {l.data.slug === 'vqe' && ' · With Prahlad M. V. (semester 1)'}
+              </p>
+              <a class="t-label link-u" href={href(`/lab/${l.data.slug}/`)} aria-hidden="true" tabindex="-1">
+                Read →
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="exp-h">
+      <h2 class="t-label lab-h" id="exp-h">Experiments</h2>
+      <p class="lab-note graphite">Small builds and analyses. No headline numbers are claimed for these.</p>
+      <ul class="list">
+        {
+          experiments.map((e) => (
+            <li class="list__row">
+              <a class="list__title link-u" href={e.repo} rel="noopener">
+                {e.title} ↗
+              </a>
+              <span>
+                {e.line}
+                {e.note && <span class="graphite"> {e.note}</span>}
+              </span>
+              <span class="list__stamp">{e.evidence ? <EvidenceStamp evidenceId={e.evidence} /> : <span class="t-label graphite">Prototype</span>}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="writing-h">
+      <h2 class="t-label lab-h" id="writing-h">Writing</h2>
+      <p class="lab-note graphite">Product teardowns written during the NextLeap Product Management Fellowship.</p>
+      <ul class="list">
+        {
+          writing.map((w) => (
+            <li class="list__row list__row--2">
+              <a class="list__title link-u" href={w.url} rel="noopener">
+                {w.title} ↗
+              </a>
+              <span class="t-label graphite">PDF · NextLeap</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .lab-h {
+    margin-bottom: var(--space-5);
+  }
+  .lab-note {
+    margin: calc(-1 * var(--space-3)) 0 var(--space-5);
+    max-width: var(--measure);
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+  }
+  .card {
+    border: var(--rule);
+    padding: var(--space-5);
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+  .card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .card__title {
+    font-size: clamp(26px, 2.6vw, 38px);
+    font-stretch: 75%;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .card__title a:hover {
+    color: var(--signal);
+  }
+  .list__row {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 6fr) minmax(0, 2fr);
+    gap: var(--space-4);
+    align-items: baseline;
+    padding-block: var(--space-4);
+    border-bottom: var(--rule-soft);
+  }
+  .list__row--2 {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  }
+  .list__title {
+    font-weight: 600;
+  }
+  .list__stamp {
+    justify-self: end;
+  }
+  @media (max-width: 767px) {
+    .cards,
+    .list__row,
+    .list__row--2 {
+      grid-template-columns: 1fr;
+    }
+    .list__row {
+      gap: var(--space-2);
+    }
+    .list__stamp {
+      justify-self: start;
+    }
+  }
+</style>

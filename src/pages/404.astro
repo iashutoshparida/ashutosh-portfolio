@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/data';
+---
+
+<BaseLayout title="Not found" description="This page does not exist." footerContact={false}>
+  <div class="wrap nf">
+    <p class="t-label">Error 404</p>
+    <h1 class="t-h1">Nothing here.</h1>
+    <p class="t-statement graphite">The link may be old, or I broke it. Either way, it failed the test.</p>
+    <p class="nf__links">
+      <a class="btn btn--solid" href={href('/')}>Home</a>
+      <a class="btn" href={href('/work/')}>All work</a>
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .nf {
+    padding-block: var(--space-9);
+    display: grid;
+    gap: var(--space-5);
+    min-height: 60vh;
+    align-content: start;
+  }
+  .nf__links {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+</style>

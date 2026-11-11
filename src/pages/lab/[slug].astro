@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EvidenceStamp from '../../components/EvidenceStamp.astro';
+import MetaGrid from '../../components/MetaGrid.astro';
+import ResultsTable from '../../components/ResultsTable.astro';
+import { getLab, href, type LabCollectionEntry } from '../../lib/data';
+
+export async function getStaticPaths() {
+  return (await getLab()).map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+interface Props {
+  entry: LabCollectionEntry;
+}
+const l = Astro.props.entry.data;
+const html = Astro.props.entry.rendered?.html ?? '';
+const docs = l.documents ?? (l.document ? [l.document] : []);
+---
+
+<BaseLayout title={l.title} current="lab" og={`lab-${l.slug}`} description={l.question}>
+  <div class="wrap">
+    <p class="crumb t-label"><a class="link-u" href={href('/lab/')}>← Lab</a></p>
+    <header class="lab-head">
+      <p class="lab-head__kicker">
+        <span class="t-label">Lab · Research</span>
+        <EvidenceStamp evidenceId={l.evidence} />
+      </p>
+      <h1 class="t-h1">{l.title}</h1>
+      <p class="t-statement lab-head__q">{l.question}</p>
+    </header>
+
+    <MetaGrid
+      items={[
+        { label: 'Course', value: l.course },
+        { label: 'Supervisor', value: l.supervisor },
+        { label: 'Team', value: l.team ?? 'Solo' },
+        { label: 'Reports', links: docs },
+      ]}
+    />
+
+    <div class="lab-body">
+      <section class="lab-sec" aria-labelledby="about-h">
+        <h2 class="t-label" id="about-h">What it is</h2>
+        <div class="prose" set:html={html} />
+      </section>
+
+      <section class="lab-sec" aria-labelledby="results-h">
+        <h2 class="t-label" id="results-h">Results</h2>
+        <ResultsTable metrics={l.metrics} caption={`${l.title}: results and how each was measured`} />
+        <p class="t-small graphite">
+          A supervised course project at BITS Pilani, not a peer-reviewed publication. Each method note says what the number was measured on.
+        </p>
+      </section>
+    </div>
+
+    <p class="back"><a class="btn" href={href('/lab/')}>← All lab work</a></p>
+  </div>
+</BaseLayout>
+
+<style>
+  .crumb {
+    padding-top: var(--space-6);
+  }
+  .lab-head {
+    padding-block: var(--space-7);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .lab-head__kicker {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  .lab-head__q {
+    max-width: 30ch;
+    font-size: clamp(24px, 2.8vw, 40px);
+  }
+  .lab-body {
+    display: grid;
+    gap: var(--space-7);
+    padding-block: var(--space-7);
+  }
+  .lab-sec {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .lab-sec .prose {
+    max-width: var(--measure);
+  }
+  .back {
+    padding-bottom: var(--space-8);
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+// Dates · main · org rows, the same grid as ExperienceList.
+interface Row {
+  dates?: string | null;
+  main: string;
+  org: string;
+  note?: string;
+}
+interface Props {
+  rows: Row[];
+}
+const { rows } = Astro.props;
+---
+
+<ul class="rows">
+  {
+    rows.map((r) => (
+      <li class="rows__row">
+        <span class="t-label">{r.dates ?? '—'}</span>
+        <span class="rows__main">
+          {r.main}
+          {r.note && <span class="rows__note graphite"> {r.note}</span>}
+        </span>
+        <span>{r.org}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .rows__row {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+    padding-block: var(--space-4);
+    border-bottom: var(--rule-soft);
+  }
+  .rows__main {
+    font-weight: 600;
+  }
+  .rows__note {
+    font-weight: 400;
+  }
+  @media (max-width: 767px) {
+    .rows__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>

@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { evidence, site, href } from '../lib/data';
+import { PRESSURE_MAT, OTHER_DATA } from '../lib/citations';
+---
+
+<BaseLayout
+  title="Colophon"
+  og="default"
+  description="How this site is built, the evidence labels used on every number, and the datasets it cites."
+>
+  <div class="wrap">
+    <PageHead
+      kicker="Colophon"
+      title="Colophon"
+      lede="How this site is made, what the labels on every number mean, and whose data it uses."
+    />
+
+    <section class="section grid" aria-labelledby="evidence">
+      <h2 class="lane-margin t-label" id="evidence">Evidence labels</h2>
+      <div class="lane-wide">
+        <p class="col-lede">
+          Every number on this site carries one of these labels. Select a label anywhere on the site to see how that
+          number was measured and where to check it.
+        </p>
+        <dl class="legend">
+          {
+            evidence.map((e) => (
+              <div class="legend__row">
+                <dt>
+                  <span class="stamp">{e.label}</span>
+                </dt>
+                <dd>{e.definition}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section class="section grid" aria-labelledby="build-h">
+      <h2 class="lane-margin t-label" id="build-h">How it’s built</h2>
+      <div class="lane-text prose">
+        <p>{site.footer.build_note}</p>
+        <p>
+          Static HTML generated with Astro, plain CSS and a few small TypeScript modules. The three interactive figures
+          load only on the pages that use them, and each still shows its information when JavaScript is off.
+          No trackers, no cookies, no third-party scripts.
+        </p>
+        <p>
+          The interactive figures read files exported from each project’s own repository. They display the committed
+          values without recomputing them.
+        </p>
+      </div>
+    </section>
+
+    <section class="section grid" aria-labelledby="type-h">
+      <h2 class="lane-margin t-label" id="type-h">Type</h2>
+      <div class="lane-text prose">
+        <p>
+          <strong>Archivo</strong> by Omnibus-Type, and <strong>IBM Plex Mono</strong> by IBM. Both are licensed under
+          the SIL Open Font License 1.1 and served from this site.
+        </p>
+        <p class="t-data">
+          <a class="link-u" href={href('/fonts/LICENSE-Archivo.txt')}>Archivo licence ↗</a> ·
+          <a class="link-u" href={href('/fonts/LICENSE-IBM-Plex.txt')}>IBM Plex licence ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section grid" aria-labelledby="data-h">
+      <h2 class="lane-margin t-label" id="data-h">Data citations</h2>
+      <div class="lane-wide">
+        <h3 class="t-label graphite cite-h">Pressure-ViT</h3>
+        <ul class="cites">
+          {
+            PRESSURE_MAT.map((c) => (
+              <li>
+                {c.text}{' '}
+                <a class="link-u" href={c.url} rel="noopener">
+                  {c.url.replace('https://', '')} ↗
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <h3 class="t-label graphite cite-h">Other public data</h3>
+        <ul class="cites">
+          {
+            OTHER_DATA.map((c) => (
+              <li>
+                <span class="t-label">{c.used}</span>
+                <br />
+                {c.text}{' '}
+                <a class="link-u" href={c.url} rel="noopener">
+                  Source ↗
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .col-lede {
+    max-width: var(--measure);
+    margin-bottom: var(--space-5);
+  }
+  .legend__row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-bottom: var(--rule-soft);
+    align-items: baseline;
+  }
+  .cite-h {
+    margin: var(--space-5) 0 var(--space-3);
+  }
+  .cite-h:first-child {
+    margin-top: 0;
+  }
+  .cites {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 80ch;
+  }
+  .cites li {
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 767px) {
+    .legend__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>
