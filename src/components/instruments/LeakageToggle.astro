@@ -1,0 +1,160 @@
+---
+// I-3 Pressure-ViT leakage toggle. Default state is rendered at build time; JS adds the toggle.
+import '../../styles/instruments.css';
+import EvidenceStamp from '../EvidenceStamp.astro';
+import data from '../../data/pressure-vit-leakage.json';
+import type { Metric } from '../../lib/schemas';
+interface Props {
+  metric: Metric;
+}
+const { metric } = Astro.props;
+const loso = data.splits.loso;
+const rf = data.splits.random_frames;
+const pct = (x: number) => `${x * 100}%`;
+---
+
+<figure class="inst leak" data-instrument="leakage" data-split="loso" aria-labelledby="leak-title">
+  <div class="inst__head">
+    <p class="t-label" id="leak-title">Instrument · How the test was split</p>
+    <div class="inst__head-meta">
+      <EvidenceStamp evidenceId={metric.evidence} method={metric.method} source={metric.source} />
+      <a class="t-label link-u" href={data.meta.source_repo} rel="noopener">Source ↗</a>
+    </div>
+  </div>
+
+  <div class="leak__body">
+    <div class="inst__controls js-only">
+      <div class="seg" role="group" aria-label="Split strategy">
+        <button type="button" data-split="random_frames" aria-pressed="false">Random frames</button>
+        <button type="button" data-split="loso" aria-pressed="true">Unseen people</button>
+      </div>
+    </div>
+
+    <div class="leak__display">
+      <div class="leak__readout">
+        <span class="t-proof" data-value data-claim>{loso.display.accuracy}</span>
+        <span class="leak__delta t-label" data-delta hidden>{data.delta_display} inflated</span>
+        <span class="t-data graphite" data-ci>95% CI {loso.display.ci95}</span>
+      </div>
+      <div class="leak__bar" aria-hidden="true">
+        <div class="leak__track">
+          <span class="leak__fill" data-fill style={`width:${pct(loso.accuracy)}`}></span>
+          <span
+            class="leak__whisker"
+            data-whisker
+            style={`left:${pct(loso.accuracy_ci95[0])};width:${pct(loso.accuracy_ci95[1] - loso.accuracy_ci95[0])}`}
+          ></span>
+          <span class="leak__honest" style={`left:${pct(loso.accuracy)}`}><span class="t-label">honest result</span></span>
+        </div>
+        <div class="leak__axis t-data graphite"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+      <p class="leak__expl" data-expl>{data.explanations.loso}</p>
+    </div>
+  </div>
+
+  <p class="visually-hidden" aria-live="polite" data-live></p>
+
+  <noscript>
+    <table class="inst__fallback">
+      <caption class="visually-hidden">Accuracy under each split strategy</caption>
+      <thead><tr><th scope="col">Split</th><th scope="col">17-position accuracy</th><th scope="col">95% CI</th><th scope="col">What it means</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Unseen people</th><td>{loso.display.accuracy}</td><td>{loso.display.ci95}</td><td>{data.explanations.loso}</td></tr>
+        <tr><th scope="row">Random frames</th><td>{rf.display.accuracy} ({data.delta_display})</td><td>{rf.display.ci95}</td><td>{data.explanations.random_frames}</td></tr>
+      </tbody>
+    </table>
+  </noscript>
+
+  <figcaption class="inst__caption">
+    Same model, same training, two ways of splitting the data. The marker shows the honest number; the gap is how much a leaky split would have overstated it.
+  </figcaption>
+</figure>
+
+<script src="../../scripts/instruments.ts"></script>
+
+<style>
+  .leak__body {
+    display: grid;
+    grid-template-columns: 4fr 8fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .leak__display {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .leak__readout {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+  }
+  .leak__delta {
+    color: var(--signal);
+    border: 1px solid var(--signal);
+    padding: 3px 7px;
+  }
+  .leak__delta[hidden] {
+    display: inline-block;
+    visibility: hidden;
+  }
+  .leak__track {
+    position: relative;
+    height: 40px;
+    background: var(--paper-deep);
+    margin-top: var(--space-6);
+  }
+  .leak__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--ink);
+    transition: width var(--dur-base) var(--ease);
+  }
+  .leak__whisker {
+    position: absolute;
+    top: 50%;
+    height: 14px;
+    transform: translateY(-50%);
+    border: 2px solid var(--paper);
+    border-block: 0;
+    background: linear-gradient(var(--paper), var(--paper)) center / 100% 2px no-repeat;
+    transition: left var(--dur-base) var(--ease), width var(--dur-base) var(--ease);
+  }
+  .leak__honest {
+    position: absolute;
+    top: -28px;
+    bottom: -6px;
+    width: 0;
+    border-left: 2px solid var(--signal);
+  }
+  .leak__honest .t-label {
+    position: absolute;
+    top: 0;
+    right: 6px;
+    white-space: nowrap;
+    color: var(--signal);
+  }
+  .leak__axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-2);
+  }
+  .leak__expl {
+    max-width: 52ch;
+    min-height: 3.2em;
+  }
+  @media (max-width: 1199px) {
+    .leak__body {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+  @media (max-width: 767px) {
+    .seg {
+      width: 100%;
+    }
+    .seg button {
+      flex: 1;
+    }
+  }
+</style>

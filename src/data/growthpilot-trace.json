@@ -1,0 +1,1694 @@
+{
+ "meta": {
+  "instrument": "growthpilot-agent-trace",
+  "evidence": "SIMULATION",
+  "evidence_note": "Simulated players and ad channels. No real ad spend, no real users.",
+  "source_repo": "https://github.com/iashutoshparida/growthpilot",
+  "source_commit": "fd3c6f1",
+  "seed": 0,
+  "rationale_source": "template (no LLM)",
+  "generated_at": "2026-11-11T08:25:59+00:00",
+  "approval_note": "In the simulator the human reviewer is a stub that always approves; the replay must say so."
+ },
+ "guardrails": {
+  "daily_budget": 3000.0,
+  "max_daily_change": 0.2,
+  "min_share": 0.05,
+  "approval_shift": 0.08
+ },
+ "check": {
+  "fixed_roas": 0.4439,
+  "agent_roas": 0.4941,
+  "committed_fixed_roas": 0.4439,
+  "committed_agent_roas": 0.4941
+ },
+ "days": [
+  {
+   "day": 1,
+   "observe": [],
+   "estimate_roas": {
+    "meta": 0.4,
+    "google_uac": 0.4,
+    "applovin": 0.4,
+    "unity": 0.4
+   },
+   "prev_allocation": {
+    "meta": 750.0,
+    "google_uac": 750.0,
+    "applovin": 750.0,
+    "unity": 750.0
+   },
+   "proposal": {
+    "meta": 749.4,
+    "google_uac": 748.2,
+    "applovin": 743.4,
+    "unity": 759.0
+   },
+   "rationale": "Moving budget toward unity (predicted ROAS 0.40) and away from applovin (predicted ROAS 0.40).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 749.4,
+    "google_uac": 748.2,
+    "applovin": 743.4,
+    "unity": 759.0
+   },
+   "shifted_share": 0.003,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.30%"
+  },
+  {
+   "day": 2,
+   "observe": [],
+   "estimate_roas": {
+    "meta": 0.4,
+    "google_uac": 0.4,
+    "applovin": 0.4,
+    "unity": 0.4
+   },
+   "prev_allocation": {
+    "meta": 749.4,
+    "google_uac": 748.2,
+    "applovin": 743.4,
+    "unity": 759.0
+   },
+   "proposal": {
+    "meta": 755.4,
+    "google_uac": 763.2,
+    "applovin": 750.6,
+    "unity": 730.8
+   },
+   "rationale": "Moving budget toward google_uac (predicted ROAS 0.40) and away from unity (predicted ROAS 0.40).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 755.4,
+    "google_uac": 763.2,
+    "applovin": 750.6,
+    "unity": 730.8
+   },
+   "shifted_share": 0.0094,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.94%"
+  },
+  {
+   "day": 3,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 750.0,
+     "pred_revenue": 459.04
+    },
+    {
+     "channel": "google_uac",
+     "spend": 750.0,
+     "pred_revenue": 335.17
+    },
+    {
+     "channel": "applovin",
+     "spend": 750.0,
+     "pred_revenue": 329.99
+    },
+    {
+     "channel": "unity",
+     "spend": 750.0,
+     "pred_revenue": 200.09
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.506,
+    "google_uac": 0.423,
+    "applovin": 0.42,
+    "unity": 0.333
+   },
+   "prev_allocation": {
+    "meta": 755.4,
+    "google_uac": 763.2,
+    "applovin": 750.6,
+    "unity": 730.8
+   },
+   "proposal": {
+    "meta": 1064.4,
+    "google_uac": 755.4,
+    "applovin": 738.0,
+    "unity": 442.2
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.51) and away from unity (predicted ROAS 0.33).",
+   "guardrail_violations": [
+    "change_cap: meta 1064 outside [604, 906]",
+    "change_cap: unity 442 outside [585, 877]"
+   ],
+   "allocation": {
+    "meta": 906.48,
+    "google_uac": 759.44,
+    "applovin": 742.09,
+    "unity": 591.99
+   },
+   "shifted_share": 0.0504,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "5.04%"
+  },
+  {
+   "day": 4,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 749.4,
+     "pred_revenue": 229.32
+    },
+    {
+     "channel": "google_uac",
+     "spend": 748.2,
+     "pred_revenue": 226.67
+    },
+    {
+     "channel": "applovin",
+     "spend": 743.4,
+     "pred_revenue": 578.41
+    },
+    {
+     "channel": "unity",
+     "spend": 759.0,
+     "pred_revenue": 191.79
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.452,
+    "google_uac": 0.376,
+    "applovin": 0.58,
+    "unity": 0.26
+   },
+   "prev_allocation": {
+    "meta": 906.48,
+    "google_uac": 759.44,
+    "applovin": 742.09,
+    "unity": 591.99
+   },
+   "proposal": {
+    "meta": 615.6,
+    "google_uac": 199.2,
+    "applovin": 2035.2,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.58) and away from google_uac (predicted ROAS 0.38).",
+   "guardrail_violations": [
+    "change_cap: meta 616 outside [725, 1088]",
+    "change_cap: google_uac 199 outside [608, 911]",
+    "change_cap: applovin 2035 outside [594, 891]",
+    "change_cap: unity 150 outside [474, 710]"
+   ],
+   "allocation": {
+    "meta": 846.89,
+    "google_uac": 709.52,
+    "applovin": 890.51,
+    "unity": 553.08
+   },
+   "shifted_share": 0.0495,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "4.95%"
+  },
+  {
+   "day": 5,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 755.4,
+     "pred_revenue": 259.65
+    },
+    {
+     "channel": "google_uac",
+     "spend": 763.2,
+     "pred_revenue": 281.97
+    },
+    {
+     "channel": "applovin",
+     "spend": 750.6,
+     "pred_revenue": 315.77
+    },
+    {
+     "channel": "unity",
+     "spend": 730.8,
+     "pred_revenue": 145.71
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.419,
+    "google_uac": 0.373,
+    "applovin": 0.532,
+    "unity": 0.241
+   },
+   "prev_allocation": {
+    "meta": 846.89,
+    "google_uac": 709.52,
+    "applovin": 890.51,
+    "unity": 553.08
+   },
+   "proposal": {
+    "meta": 535.8,
+    "google_uac": 198.0,
+    "applovin": 2116.2,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.53) and away from google_uac (predicted ROAS 0.37).",
+   "guardrail_violations": [
+    "change_cap: meta 536 outside [678, 1016]",
+    "change_cap: google_uac 198 outside [568, 851]",
+    "change_cap: applovin 2116 outside [712, 1069]",
+    "change_cap: unity 150 outside [442, 664]"
+   ],
+   "allocation": {
+    "meta": 775.39,
+    "google_uac": 649.61,
+    "applovin": 1068.61,
+    "unity": 506.38
+   },
+   "shifted_share": 0.0594,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "5.94%"
+  },
+  {
+   "day": 6,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 906.48,
+     "pred_revenue": 344.51
+    },
+    {
+     "channel": "google_uac",
+     "spend": 759.44,
+     "pred_revenue": 381.41
+    },
+    {
+     "channel": "applovin",
+     "spend": 742.09,
+     "pred_revenue": 239.87
+    },
+    {
+     "channel": "unity",
+     "spend": 591.99,
+     "pred_revenue": 166.02
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.409,
+    "google_uac": 0.406,
+    "applovin": 0.483,
+    "unity": 0.249
+   },
+   "prev_allocation": {
+    "meta": 775.39,
+    "google_uac": 649.61,
+    "applovin": 1068.61,
+    "unity": 506.38
+   },
+   "proposal": {
+    "meta": 556.8,
+    "google_uac": 425.4,
+    "applovin": 1867.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.48) and away from unity (predicted ROAS 0.25).",
+   "guardrail_violations": [
+    "change_cap: meta 557 outside [620, 930]",
+    "change_cap: google_uac 425 outside [520, 780]",
+    "change_cap: applovin 1868 outside [855, 1282]",
+    "change_cap: unity 150 outside [405, 608]"
+   ],
+   "allocation": {
+    "meta": 689.59,
+    "google_uac": 577.73,
+    "applovin": 1282.34,
+    "unity": 450.35
+   },
+   "shifted_share": 0.0712,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "7.12%"
+  },
+  {
+   "day": 7,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 846.89,
+     "pred_revenue": 376.92
+    },
+    {
+     "channel": "google_uac",
+     "spend": 709.52,
+     "pred_revenue": 165.62
+    },
+    {
+     "channel": "applovin",
+     "spend": 890.51,
+     "pred_revenue": 550.57
+    },
+    {
+     "channel": "unity",
+     "spend": 553.08,
+     "pred_revenue": 187.52
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.416,
+    "google_uac": 0.373,
+    "applovin": 0.513,
+    "unity": 0.264
+   },
+   "prev_allocation": {
+    "meta": 689.59,
+    "google_uac": 577.73,
+    "applovin": 1282.34,
+    "unity": 450.35
+   },
+   "proposal": {
+    "meta": 426.6,
+    "google_uac": 214.2,
+    "applovin": 2209.2,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.51) and away from google_uac (predicted ROAS 0.37).",
+   "guardrail_violations": [
+    "change_cap: meta 427 outside [552, 828]",
+    "change_cap: google_uac 214 outside [462, 693]",
+    "change_cap: applovin 2209 outside [1026, 1539]",
+    "change_cap: unity 150 outside [360, 540]"
+   ],
+   "allocation": {
+    "meta": 586.63,
+    "google_uac": 491.47,
+    "applovin": 1538.8,
+    "unity": 383.11
+   },
+   "shifted_share": 0.0855,
+   "needs_approval": true,
+   "approval": "approved (simulated reviewer)",
+   "shifted_share_display": "8.55%"
+  },
+  {
+   "day": 8,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 775.39,
+     "pred_revenue": 228.2
+    },
+    {
+     "channel": "google_uac",
+     "spend": 649.61,
+     "pred_revenue": 309.56
+    },
+    {
+     "channel": "applovin",
+     "spend": 1068.61,
+     "pred_revenue": 876.6
+    },
+    {
+     "channel": "unity",
+     "spend": 506.38,
+     "pred_revenue": 119.8
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.397,
+    "google_uac": 0.388,
+    "applovin": 0.573,
+    "unity": 0.26
+   },
+   "prev_allocation": {
+    "meta": 586.63,
+    "google_uac": 491.47,
+    "applovin": 1538.8,
+    "unity": 383.11
+   },
+   "proposal": {
+    "meta": 190.8,
+    "google_uac": 174.6,
+    "applovin": 2484.6,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.57) and away from meta (predicted ROAS 0.40).",
+   "guardrail_violations": [
+    "change_cap: meta 191 outside [469, 704]",
+    "change_cap: google_uac 175 outside [393, 590]",
+    "change_cap: applovin 2485 outside [1231, 1847]",
+    "change_cap: unity 150 outside [306, 460]"
+   ],
+   "allocation": {
+    "meta": 469.3,
+    "google_uac": 393.17,
+    "applovin": 1831.04,
+    "unity": 306.48
+   },
+   "shifted_share": 0.0974,
+   "needs_approval": true,
+   "approval": "approved (simulated reviewer)",
+   "shifted_share_display": "9.74%"
+  },
+  {
+   "day": 9,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 689.59,
+     "pred_revenue": 203.05
+    },
+    {
+     "channel": "google_uac",
+     "spend": 577.73,
+     "pred_revenue": 256.5
+    },
+    {
+     "channel": "applovin",
+     "spend": 1282.34,
+     "pred_revenue": 768.6
+    },
+    {
+     "channel": "unity",
+     "spend": 450.35,
+     "pred_revenue": 120.61
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.384,
+    "google_uac": 0.395,
+    "applovin": 0.58,
+    "unity": 0.261
+   },
+   "prev_allocation": {
+    "meta": 469.3,
+    "google_uac": 393.17,
+    "applovin": 1831.04,
+    "unity": 306.48
+   },
+   "proposal": {
+    "meta": 161.4,
+    "google_uac": 160.2,
+    "applovin": 2528.4,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.58) and away from meta (predicted ROAS 0.38).",
+   "guardrail_violations": [
+    "change_cap: meta 161 outside [375, 563]",
+    "change_cap: google_uac 160 outside [315, 472]",
+    "change_cap: applovin 2528 outside [1465, 2197]",
+    "change_cap: unity 150 outside [245, 368]"
+   ],
+   "allocation": {
+    "meta": 375.44,
+    "google_uac": 314.54,
+    "applovin": 2064.83,
+    "unity": 245.19
+   },
+   "shifted_share": 0.0779,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "7.79%"
+  },
+  {
+   "day": 10,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 586.63,
+     "pred_revenue": 309.91
+    },
+    {
+     "channel": "google_uac",
+     "spend": 491.47,
+     "pred_revenue": 179.78
+    },
+    {
+     "channel": "applovin",
+     "spend": 1538.8,
+     "pred_revenue": 640.13
+    },
+    {
+     "channel": "unity",
+     "spend": 383.11,
+     "pred_revenue": 80.4
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.398,
+    "google_uac": 0.392,
+    "applovin": 0.548,
+    "unity": 0.257
+   },
+   "prev_allocation": {
+    "meta": 375.44,
+    "google_uac": 314.54,
+    "applovin": 2064.83,
+    "unity": 245.19
+   },
+   "proposal": {
+    "meta": 180.6,
+    "google_uac": 166.2,
+    "applovin": 2503.2,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.55) and away from meta (predicted ROAS 0.40).",
+   "guardrail_violations": [
+    "change_cap: meta 181 outside [300, 451]",
+    "change_cap: google_uac 166 outside [252, 377]",
+    "change_cap: applovin 2503 outside [1652, 2478]",
+    "change_cap: unity 150 outside [196, 294]"
+   ],
+   "allocation": {
+    "meta": 300.35,
+    "google_uac": 251.63,
+    "applovin": 2251.87,
+    "unity": 196.15
+   },
+   "shifted_share": 0.0623,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "6.23%"
+  },
+  {
+   "day": 11,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 469.3,
+     "pred_revenue": 213.08
+    },
+    {
+     "channel": "google_uac",
+     "spend": 393.17,
+     "pred_revenue": 74.28
+    },
+    {
+     "channel": "applovin",
+     "spend": 1831.04,
+     "pred_revenue": 1019.24
+    },
+    {
+     "channel": "unity",
+     "spend": 306.48,
+     "pred_revenue": 53.67
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.402,
+    "google_uac": 0.379,
+    "applovin": 0.55,
+    "unity": 0.252
+   },
+   "prev_allocation": {
+    "meta": 300.35,
+    "google_uac": 251.63,
+    "applovin": 2251.87,
+    "unity": 196.15
+   },
+   "proposal": {
+    "meta": 165.0,
+    "google_uac": 155.4,
+    "applovin": 2529.6,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.55) and away from meta (predicted ROAS 0.40).",
+   "guardrail_violations": [
+    "change_cap: meta 165 outside [240, 360]",
+    "change_cap: google_uac 155 outside [201, 302]",
+    "change_cap: unity 150 outside [157, 235]"
+   ],
+   "allocation": {
+    "meta": 240.28,
+    "google_uac": 201.3,
+    "applovin": 2401.49,
+    "unity": 156.92
+   },
+   "shifted_share": 0.0499,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "4.99%"
+  },
+  {
+   "day": 12,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 375.44,
+     "pred_revenue": 335.12
+    },
+    {
+     "channel": "google_uac",
+     "spend": 314.54,
+     "pred_revenue": 80.17
+    },
+    {
+     "channel": "applovin",
+     "spend": 2064.83,
+     "pred_revenue": 1036.63
+    },
+    {
+     "channel": "unity",
+     "spend": 245.19,
+     "pred_revenue": 50.35
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.428,
+    "google_uac": 0.372,
+    "applovin": 0.542,
+    "unity": 0.25
+   },
+   "prev_allocation": {
+    "meta": 240.28,
+    "google_uac": 201.3,
+    "applovin": 2401.49,
+    "unity": 156.92
+   },
+   "proposal": {
+    "meta": 235.2,
+    "google_uac": 151.2,
+    "applovin": 2463.6,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.54) and away from google_uac (predicted ROAS 0.37).",
+   "guardrail_violations": [
+    "change_cap: google_uac 151 outside [161, 242]"
+   ],
+   "allocation": {
+    "meta": 234.48,
+    "google_uac": 161.04,
+    "applovin": 2454.48,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0177,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "1.77%"
+  },
+  {
+   "day": 13,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 300.35,
+     "pred_revenue": 178.53
+    },
+    {
+     "channel": "google_uac",
+     "spend": 251.63,
+     "pred_revenue": 187.59
+    },
+    {
+     "channel": "applovin",
+     "spend": 2251.87,
+     "pred_revenue": 1154.36
+    },
+    {
+     "channel": "unity",
+     "spend": 196.15,
+     "pred_revenue": 53.46
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.435,
+    "google_uac": 0.387,
+    "applovin": 0.538,
+    "unity": 0.251
+   },
+   "prev_allocation": {
+    "meta": 234.48,
+    "google_uac": 161.04,
+    "applovin": 2454.48,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 235.2,
+    "google_uac": 154.2,
+    "applovin": 2460.6,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.54) and away from google_uac (predicted ROAS 0.39).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 235.2,
+    "google_uac": 154.2,
+    "applovin": 2460.6,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0023,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.23%"
+  },
+  {
+   "day": 14,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 240.28,
+     "pred_revenue": 45.72
+    },
+    {
+     "channel": "google_uac",
+     "spend": 201.3,
+     "pred_revenue": 73.27
+    },
+    {
+     "channel": "applovin",
+     "spend": 2401.49,
+     "pred_revenue": 1556.34
+    },
+    {
+     "channel": "unity",
+     "spend": 156.92,
+     "pred_revenue": 28.4
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.427,
+    "google_uac": 0.386,
+    "applovin": 0.554,
+    "unity": 0.249
+   },
+   "prev_allocation": {
+    "meta": 235.2,
+    "google_uac": 154.2,
+    "applovin": 2460.6,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 183.0,
+    "google_uac": 151.2,
+    "applovin": 2515.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.55) and away from meta (predicted ROAS 0.43).",
+   "guardrail_violations": [
+    "change_cap: meta 183 outside [188, 282]"
+   ],
+   "allocation": {
+    "meta": 188.16,
+    "google_uac": 151.19,
+    "applovin": 2510.65,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0167,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "1.67%"
+  },
+  {
+   "day": 15,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 234.48,
+     "pred_revenue": 59.78
+    },
+    {
+     "channel": "google_uac",
+     "spend": 161.04,
+     "pred_revenue": 25.75
+    },
+    {
+     "channel": "applovin",
+     "spend": 2454.48,
+     "pred_revenue": 1235.72
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 44.47
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.422,
+    "google_uac": 0.381,
+    "applovin": 0.547,
+    "unity": 0.25
+   },
+   "prev_allocation": {
+    "meta": 188.16,
+    "google_uac": 151.19,
+    "applovin": 2510.65,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 175.8,
+    "google_uac": 150.6,
+    "applovin": 2523.6,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.55) and away from meta (predicted ROAS 0.42).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 175.8,
+    "google_uac": 150.6,
+    "applovin": 2523.6,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0043,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.43%"
+  },
+  {
+   "day": 16,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 235.2,
+     "pred_revenue": 82.09
+    },
+    {
+     "channel": "google_uac",
+     "spend": 154.2,
+     "pred_revenue": 64.35
+    },
+    {
+     "channel": "applovin",
+     "spend": 2460.6,
+     "pred_revenue": 1235.38
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 31.16
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.42,
+    "google_uac": 0.382,
+    "applovin": 0.542,
+    "unity": 0.249
+   },
+   "prev_allocation": {
+    "meta": 175.8,
+    "google_uac": 150.6,
+    "applovin": 2523.6,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 169.2,
+    "google_uac": 150.0,
+    "applovin": 2530.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.54) and away from meta (predicted ROAS 0.42).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 169.2,
+    "google_uac": 150.0,
+    "applovin": 2530.8,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0024,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.24%"
+  },
+  {
+   "day": 17,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 188.16,
+     "pred_revenue": 49.26
+    },
+    {
+     "channel": "google_uac",
+     "spend": 151.19,
+     "pred_revenue": 102.26
+    },
+    {
+     "channel": "applovin",
+     "spend": 2510.65,
+     "pred_revenue": 1257.39
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 20.24
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.416,
+    "google_uac": 0.388,
+    "applovin": 0.538,
+    "unity": 0.246
+   },
+   "prev_allocation": {
+    "meta": 169.2,
+    "google_uac": 150.0,
+    "applovin": 2530.8,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 166.2,
+    "google_uac": 150.0,
+    "applovin": 2533.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.54) and away from meta (predicted ROAS 0.42).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 166.2,
+    "google_uac": 150.0,
+    "applovin": 2533.8,
+    "unity": 150.0
+   },
+   "shifted_share": 0.001,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.10%"
+  },
+  {
+   "day": 18,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 175.8,
+     "pred_revenue": 221.22
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.6,
+     "pred_revenue": 72.17
+    },
+    {
+     "channel": "applovin",
+     "spend": 2523.6,
+     "pred_revenue": 1449.2
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 25.25
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.433,
+    "google_uac": 0.39,
+    "applovin": 0.541,
+    "unity": 0.244
+   },
+   "prev_allocation": {
+    "meta": 166.2,
+    "google_uac": 150.0,
+    "applovin": 2533.8,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 199.2,
+    "google_uac": 150.0,
+    "applovin": 2500.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.43) and away from applovin (predicted ROAS 0.54).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 199.2,
+    "google_uac": 150.0,
+    "applovin": 2500.8,
+    "unity": 150.0
+   },
+   "shifted_share": 0.011,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "1.10%"
+  },
+  {
+   "day": 19,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 169.2,
+     "pred_revenue": 105.12
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.0,
+     "pred_revenue": 29.27
+    },
+    {
+     "channel": "applovin",
+     "spend": 2530.8,
+     "pred_revenue": 1180.82
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 80.12
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.437,
+    "google_uac": 0.386,
+    "applovin": 0.535,
+    "unity": 0.251
+   },
+   "prev_allocation": {
+    "meta": 199.2,
+    "google_uac": 150.0,
+    "applovin": 2500.8,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 226.2,
+    "google_uac": 150.0,
+    "applovin": 2473.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.44) and away from applovin (predicted ROAS 0.53).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 226.2,
+    "google_uac": 150.0,
+    "applovin": 2473.8,
+    "unity": 150.0
+   },
+   "shifted_share": 0.009,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.90%"
+  },
+  {
+   "day": 20,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 166.2,
+     "pred_revenue": 90.89
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.0,
+     "pred_revenue": 45.68
+    },
+    {
+     "channel": "applovin",
+     "spend": 2533.8,
+     "pred_revenue": 1335.88
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 21.9
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.439,
+    "google_uac": 0.384,
+    "applovin": 0.534,
+    "unity": 0.249
+   },
+   "prev_allocation": {
+    "meta": 226.2,
+    "google_uac": 150.0,
+    "applovin": 2473.8,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 219.6,
+    "google_uac": 150.0,
+    "applovin": 2480.4,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.53) and away from meta (predicted ROAS 0.44).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 219.6,
+    "google_uac": 150.0,
+    "applovin": 2480.4,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0022,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.22%"
+  },
+  {
+   "day": 21,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 199.2,
+     "pred_revenue": 33.18
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.0,
+     "pred_revenue": 30.51
+    },
+    {
+     "channel": "applovin",
+     "spend": 2500.8,
+     "pred_revenue": 1340.28
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 114.09
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.433,
+    "google_uac": 0.381,
+    "applovin": 0.534,
+    "unity": 0.261
+   },
+   "prev_allocation": {
+    "meta": 219.6,
+    "google_uac": 150.0,
+    "applovin": 2480.4,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 193.2,
+    "google_uac": 150.0,
+    "applovin": 2506.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.53) and away from meta (predicted ROAS 0.43).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 193.2,
+    "google_uac": 150.0,
+    "applovin": 2506.8,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0088,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.88%"
+  },
+  {
+   "day": 22,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 226.2,
+     "pred_revenue": 81.06
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.0,
+     "pred_revenue": 28.72
+    },
+    {
+     "channel": "applovin",
+     "spend": 2473.8,
+     "pred_revenue": 1197.68
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 27.17
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.431,
+    "google_uac": 0.377,
+    "applovin": 0.531,
+    "unity": 0.259
+   },
+   "prev_allocation": {
+    "meta": 193.2,
+    "google_uac": 150.0,
+    "applovin": 2506.8,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 175.2,
+    "google_uac": 150.0,
+    "applovin": 2524.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.53) and away from meta (predicted ROAS 0.43).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 175.2,
+    "google_uac": 150.0,
+    "applovin": 2524.8,
+    "unity": 150.0
+   },
+   "shifted_share": 0.006,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.60%"
+  },
+  {
+   "day": 23,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 219.6,
+     "pred_revenue": 225.79
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.0,
+     "pred_revenue": 187.37
+    },
+    {
+     "channel": "applovin",
+     "spend": 2480.4,
+     "pred_revenue": 1245.41
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 65.01
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.445,
+    "google_uac": 0.394,
+    "applovin": 0.529,
+    "unity": 0.263
+   },
+   "prev_allocation": {
+    "meta": 175.2,
+    "google_uac": 150.0,
+    "applovin": 2524.8,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 263.4,
+    "google_uac": 151.2,
+    "applovin": 2435.4,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.45) and away from applovin (predicted ROAS 0.53).",
+   "guardrail_violations": [
+    "change_cap: meta 263 outside [150, 210]"
+   ],
+   "allocation": {
+    "meta": 210.24,
+    "google_uac": 153.54,
+    "applovin": 2483.77,
+    "unity": 152.44
+   },
+   "shifted_share": 0.0137,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "1.37%"
+  },
+  {
+   "day": 24,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 193.2,
+     "pred_revenue": 236.5
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.0,
+     "pred_revenue": 70.9
+    },
+    {
+     "channel": "applovin",
+     "spend": 2506.8,
+     "pred_revenue": 1092.11
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 39.38
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.46,
+    "google_uac": 0.395,
+    "applovin": 0.524,
+    "unity": 0.263
+   },
+   "prev_allocation": {
+    "meta": 210.24,
+    "google_uac": 153.54,
+    "applovin": 2483.77,
+    "unity": 152.44
+   },
+   "proposal": {
+    "meta": 432.6,
+    "google_uac": 151.8,
+    "applovin": 2265.6,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.46) and away from applovin (predicted ROAS 0.52).",
+   "guardrail_violations": [
+    "change_cap: meta 433 outside [168, 252]"
+   ],
+   "allocation": {
+    "meta": 252.29,
+    "google_uac": 159.3,
+    "applovin": 2430.8,
+    "unity": 157.61
+   },
+   "shifted_share": 0.0177,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "1.77%"
+  },
+  {
+   "day": 25,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 175.2,
+     "pred_revenue": 70.76
+    },
+    {
+     "channel": "google_uac",
+     "spend": 150.0,
+     "pred_revenue": 35.61
+    },
+    {
+     "channel": "applovin",
+     "spend": 2524.8,
+     "pred_revenue": 1216.69
+    },
+    {
+     "channel": "unity",
+     "spend": 150.0,
+     "pred_revenue": 72.11
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.459,
+    "google_uac": 0.392,
+    "applovin": 0.521,
+    "unity": 0.267
+   },
+   "prev_allocation": {
+    "meta": 252.29,
+    "google_uac": 159.3,
+    "applovin": 2430.8,
+    "unity": 157.61
+   },
+   "proposal": {
+    "meta": 421.2,
+    "google_uac": 151.8,
+    "applovin": 2277.0,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.46) and away from applovin (predicted ROAS 0.52).",
+   "guardrail_violations": [
+    "change_cap: meta 421 outside [202, 303]"
+   ],
+   "allocation": {
+    "meta": 302.75,
+    "google_uac": 158.29,
+    "applovin": 2382.51,
+    "unity": 156.45
+   },
+   "shifted_share": 0.0168,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "1.68%"
+  },
+  {
+   "day": 26,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 210.24,
+     "pred_revenue": 34.33
+    },
+    {
+     "channel": "google_uac",
+     "spend": 153.54,
+     "pred_revenue": 134.29
+    },
+    {
+     "channel": "applovin",
+     "spend": 2483.77,
+     "pred_revenue": 1031.25
+    },
+    {
+     "channel": "unity",
+     "spend": 152.44,
+     "pred_revenue": 72.11
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.453,
+    "google_uac": 0.401,
+    "applovin": 0.515,
+    "unity": 0.271
+   },
+   "prev_allocation": {
+    "meta": 302.75,
+    "google_uac": 158.29,
+    "applovin": 2382.51,
+    "unity": 156.45
+   },
+   "proposal": {
+    "meta": 403.8,
+    "google_uac": 153.0,
+    "applovin": 2293.2,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.45) and away from applovin (predicted ROAS 0.52).",
+   "guardrail_violations": [
+    "change_cap: meta 404 outside [242, 363]"
+   ],
+   "allocation": {
+    "meta": 363.29,
+    "google_uac": 155.34,
+    "applovin": 2328.98,
+    "unity": 152.39
+   },
+   "shifted_share": 0.0202,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "2.02%"
+  },
+  {
+   "day": 27,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 252.29,
+     "pred_revenue": 106.06
+    },
+    {
+     "channel": "google_uac",
+     "spend": 159.3,
+     "pred_revenue": 55.27
+    },
+    {
+     "channel": "applovin",
+     "spend": 2430.8,
+     "pred_revenue": 768.14
+    },
+    {
+     "channel": "unity",
+     "spend": 157.61,
+     "pred_revenue": 70.19
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.453,
+    "google_uac": 0.4,
+    "applovin": 0.505,
+    "unity": 0.275
+   },
+   "prev_allocation": {
+    "meta": 363.29,
+    "google_uac": 155.34,
+    "applovin": 2328.98,
+    "unity": 152.39
+   },
+   "proposal": {
+    "meta": 496.8,
+    "google_uac": 158.4,
+    "applovin": 2194.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.45) and away from applovin (predicted ROAS 0.51).",
+   "guardrail_violations": [
+    "change_cap: meta 497 outside [291, 436]"
+   ],
+   "allocation": {
+    "meta": 435.95,
+    "google_uac": 160.98,
+    "applovin": 2250.04,
+    "unity": 153.03
+   },
+   "shifted_share": 0.0263,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "2.63%"
+  },
+  {
+   "day": 28,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 302.75,
+     "pred_revenue": 184.85
+    },
+    {
+     "channel": "google_uac",
+     "spend": 158.29,
+     "pred_revenue": 69.61
+    },
+    {
+     "channel": "applovin",
+     "spend": 2382.51,
+     "pred_revenue": 1562.86
+    },
+    {
+     "channel": "unity",
+     "spend": 156.45,
+     "pred_revenue": 56.76
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.457,
+    "google_uac": 0.401,
+    "applovin": 0.512,
+    "unity": 0.277
+   },
+   "prev_allocation": {
+    "meta": 435.95,
+    "google_uac": 160.98,
+    "applovin": 2250.04,
+    "unity": 153.03
+   },
+   "proposal": {
+    "meta": 463.2,
+    "google_uac": 154.2,
+    "applovin": 2232.6,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.46) and away from applovin (predicted ROAS 0.51).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 463.2,
+    "google_uac": 154.2,
+    "applovin": 2232.6,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0091,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.91%"
+  },
+  {
+   "day": 29,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 363.29,
+     "pred_revenue": 162.17
+    },
+    {
+     "channel": "google_uac",
+     "spend": 155.34,
+     "pred_revenue": 19.26
+    },
+    {
+     "channel": "applovin",
+     "spend": 2328.98,
+     "pred_revenue": 1001.29
+    },
+    {
+     "channel": "unity",
+     "spend": 152.39,
+     "pred_revenue": 79.66
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.457,
+    "google_uac": 0.396,
+    "applovin": 0.509,
+    "unity": 0.281
+   },
+   "prev_allocation": {
+    "meta": 463.2,
+    "google_uac": 154.2,
+    "applovin": 2232.6,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 481.2,
+    "google_uac": 153.0,
+    "applovin": 2215.8,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward meta (predicted ROAS 0.46) and away from applovin (predicted ROAS 0.51).",
+   "guardrail_violations": [],
+   "allocation": {
+    "meta": 481.2,
+    "google_uac": 153.0,
+    "applovin": 2215.8,
+    "unity": 150.0
+   },
+   "shifted_share": 0.006,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "0.60%"
+  },
+  {
+   "day": 30,
+   "observe": [
+    {
+     "channel": "meta",
+     "spend": 435.95,
+     "pred_revenue": 133.64
+    },
+    {
+     "channel": "google_uac",
+     "spend": 160.98,
+     "pred_revenue": 42.06
+    },
+    {
+     "channel": "applovin",
+     "spend": 2250.04,
+     "pred_revenue": 1201.23
+    },
+    {
+     "channel": "unity",
+     "spend": 153.03,
+     "pred_revenue": 34.12
+    }
+   ],
+   "estimate_roas": {
+    "meta": 0.451,
+    "google_uac": 0.393,
+    "applovin": 0.51,
+    "unity": 0.28
+   },
+   "prev_allocation": {
+    "meta": 481.2,
+    "google_uac": 153.0,
+    "applovin": 2215.8,
+    "unity": 150.0
+   },
+   "proposal": {
+    "meta": 373.2,
+    "google_uac": 153.6,
+    "applovin": 2323.2,
+    "unity": 150.0
+   },
+   "rationale": "Moving budget toward applovin (predicted ROAS 0.51) and away from meta (predicted ROAS 0.45).",
+   "guardrail_violations": [
+    "change_cap: meta 373 outside [385, 577]"
+   ],
+   "allocation": {
+    "meta": 384.96,
+    "google_uac": 153.52,
+    "applovin": 2311.52,
+    "unity": 150.0
+   },
+   "shifted_share": 0.0321,
+   "needs_approval": false,
+   "approval": "not required",
+   "shifted_share_display": "3.21%"
+  }
+ ],
+ "featured_day": 7
+}

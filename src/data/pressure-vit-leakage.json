@@ -1,0 +1,50 @@
+{
+ "meta": {
+  "instrument": "pressure-vit-leakage-toggle",
+  "evidence": "PUBLIC DATA",
+  "evidence_note": "PhysioNet in-bed pressure maps; 17 positions; 40 training epochs; results committed in results/results.json.",
+  "source_repo": "https://github.com/iashutoshparida/pressure-vit",
+  "source_commit": "f86d024",
+  "generated_at": "2026-11-11T08:34:19+00:00"
+ },
+ "splits": {
+  "loso": {
+   "label": "Unseen people (leave-one-subject-out)",
+   "run_key": "vit_position_loso_40ep",
+   "accuracy": 0.9074944476008471,
+   "accuracy_ci95": [
+    0.8723394385103512,
+    0.9401427487727305
+   ],
+   "macro_f1": 0.9060931639748477,
+   "n_subjects": 13,
+   "display": {
+    "accuracy": "90.7%",
+    "ci95": "87.2\u201394.0",
+    "macro_f1": "0.906"
+   }
+  },
+  "random_frames": {
+   "label": "Random frames (leaky)",
+   "run_key": "vit_position_random_frames_40ep",
+   "accuracy": 0.9831081081081081,
+   "accuracy_ci95": [
+    0.969334927579541,
+    0.994755765597431
+   ],
+   "macro_f1": 0.9834834463875708,
+   "n_subjects": 13,
+   "display": {
+    "accuracy": "98.3%",
+    "ci95": "96.9\u201399.5",
+    "macro_f1": "0.983"
+   }
+  }
+ },
+ "delta_pts": 7.6,
+ "delta_display": "+7.6 pts",
+ "explanations": {
+  "loso": "Every frame from a given person is held out together. The model is tested on bodies it has never seen.",
+  "random_frames": "Frames from the same person land in both training and test, so the model partly learns to recognise people, not positions."
+ }
+}

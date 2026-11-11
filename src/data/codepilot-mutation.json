@@ -1,0 +1,940 @@
+{
+ "meta": {
+  "instrument": "codepilot-mutation-strip",
+  "evidence": "SEEDED BENCHMARK",
+  "evidence_note": "Mutants of the author's own sample app (examples/inventory_app), not a real-world codebase.",
+  "source_repo": "https://github.com/iashutoshparida/codepilot",
+  "source_commit": "c5cfcea",
+  "command": "codepilot evaluate examples/inventory_app --tests tests --bugs examples/inventory_app/bugs.json",
+  "generated_at": "2026-11-11T08:24:56+00:00"
+ },
+ "summary": {
+  "before": {
+   "total": 90,
+   "killed": 7,
+   "survived": 83,
+   "score": 7.78,
+   "display": {
+    "killed": "7 / 90 killed",
+    "score": "7.8%"
+   }
+  },
+  "after": {
+   "total": 90,
+   "killed": 79,
+   "survived": 11,
+   "score": 87.78,
+   "display": {
+    "killed": "79 / 90 killed",
+    "score": "87.8%"
+   }
+  },
+  "bugs_caught": {
+   "before": 0,
+   "after": 10,
+   "total": 12
+  }
+ },
+ "mutants": [
+  {
+   "key": "inventory/orders.py#0",
+   "file": "inventory/orders.py",
+   "line": 8,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return bool(SKU_PATTERN.match(sku.strip().upper()))",
+   "before": "killed",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#1",
+   "file": "inventory/orders.py",
+   "line": 13,
+   "operator": "negation",
+   "description": "remove 'not'",
+   "source_line": "if not value.isdigit():",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#2",
+   "file": "inventory/orders.py",
+   "line": 16,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if qty == 0 or qty > 10000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#3",
+   "file": "inventory/orders.py",
+   "line": 16,
+   "operator": "comparison",
+   "description": "Eq -> NotEq",
+   "source_line": "if qty == 0 or qty > 10000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#4",
+   "file": "inventory/orders.py",
+   "line": 16,
+   "operator": "constant",
+   "description": "10000 -> 10001",
+   "source_line": "if qty == 0 or qty > 10000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#5",
+   "file": "inventory/orders.py",
+   "line": 16,
+   "operator": "comparison",
+   "description": "Gt -> GtE",
+   "source_line": "if qty == 0 or qty > 10000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#6",
+   "file": "inventory/orders.py",
+   "line": 16,
+   "operator": "logical",
+   "description": "Or -> And",
+   "source_line": "if qty == 0 or qty > 10000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#7",
+   "file": "inventory/orders.py",
+   "line": 18,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return qty",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#8",
+   "file": "inventory/orders.py",
+   "line": 22,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if box_size <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#9",
+   "file": "inventory/orders.py",
+   "line": 22,
+   "operator": "comparison",
+   "description": "LtE -> Lt",
+   "source_line": "if box_size <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#10",
+   "file": "inventory/orders.py",
+   "line": 25,
+   "operator": "arithmetic",
+   "description": "Mult -> Div",
+   "source_line": "boxes = [box_size] * full",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#11",
+   "file": "inventory/orders.py",
+   "line": 28,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return boxes",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#12",
+   "file": "inventory/orders.py",
+   "line": 32,
+   "operator": "constant",
+   "description": "500 -> 501",
+   "source_line": "if is_prime and order_value >= 500:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#13",
+   "file": "inventory/orders.py",
+   "line": 32,
+   "operator": "comparison",
+   "description": "GtE -> Gt",
+   "source_line": "if is_prime and order_value >= 500:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#14",
+   "file": "inventory/orders.py",
+   "line": 32,
+   "operator": "logical",
+   "description": "And -> Or",
+   "source_line": "if is_prime and order_value >= 500:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#15",
+   "file": "inventory/orders.py",
+   "line": 33,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return \"express\"",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#16",
+   "file": "inventory/orders.py",
+   "line": 34,
+   "operator": "constant",
+   "description": "2000 -> 2001",
+   "source_line": "if is_prime or order_value >= 2000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#17",
+   "file": "inventory/orders.py",
+   "line": 34,
+   "operator": "comparison",
+   "description": "GtE -> Gt",
+   "source_line": "if is_prime or order_value >= 2000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#18",
+   "file": "inventory/orders.py",
+   "line": 34,
+   "operator": "logical",
+   "description": "Or -> And",
+   "source_line": "if is_prime or order_value >= 2000:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#19",
+   "file": "inventory/orders.py",
+   "line": 35,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return \"priority\"",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/orders.py#20",
+   "file": "inventory/orders.py",
+   "line": 36,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return \"standard\"",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#0",
+   "file": "inventory/pricing.py",
+   "line": 5,
+   "operator": "constant",
+   "description": "100 -> 101",
+   "source_line": "if qty >= 100:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#1",
+   "file": "inventory/pricing.py",
+   "line": 5,
+   "operator": "comparison",
+   "description": "GtE -> Gt",
+   "source_line": "if qty >= 100:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#2",
+   "file": "inventory/pricing.py",
+   "line": 6,
+   "operator": "constant",
+   "description": "10 -> 11",
+   "source_line": "return 10",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#3",
+   "file": "inventory/pricing.py",
+   "line": 6,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return 10",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#4",
+   "file": "inventory/pricing.py",
+   "line": 7,
+   "operator": "constant",
+   "description": "50 -> 51",
+   "source_line": "if qty >= 50:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#5",
+   "file": "inventory/pricing.py",
+   "line": 7,
+   "operator": "comparison",
+   "description": "GtE -> Gt",
+   "source_line": "if qty >= 50:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#6",
+   "file": "inventory/pricing.py",
+   "line": 8,
+   "operator": "constant",
+   "description": "5 -> 6",
+   "source_line": "return 5",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#7",
+   "file": "inventory/pricing.py",
+   "line": 8,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return 5",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#8",
+   "file": "inventory/pricing.py",
+   "line": 9,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "return 0",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#9",
+   "file": "inventory/pricing.py",
+   "line": 9,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return 0",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#10",
+   "file": "inventory/pricing.py",
+   "line": 13,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if pct < 0 or pct > 100:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#11",
+   "file": "inventory/pricing.py",
+   "line": 13,
+   "operator": "comparison",
+   "description": "Lt -> LtE",
+   "source_line": "if pct < 0 or pct > 100:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#12",
+   "file": "inventory/pricing.py",
+   "line": 13,
+   "operator": "constant",
+   "description": "100 -> 101",
+   "source_line": "if pct < 0 or pct > 100:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#13",
+   "file": "inventory/pricing.py",
+   "line": 13,
+   "operator": "comparison",
+   "description": "Gt -> GtE",
+   "source_line": "if pct < 0 or pct > 100:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#14",
+   "file": "inventory/pricing.py",
+   "line": 13,
+   "operator": "logical",
+   "description": "Or -> And",
+   "source_line": "if pct < 0 or pct > 100:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#15",
+   "file": "inventory/pricing.py",
+   "line": 15,
+   "operator": "constant",
+   "description": "1 -> 2",
+   "source_line": "return round(price * (1 - pct / 100), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#16",
+   "file": "inventory/pricing.py",
+   "line": 15,
+   "operator": "constant",
+   "description": "100 -> 101",
+   "source_line": "return round(price * (1 - pct / 100), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#17",
+   "file": "inventory/pricing.py",
+   "line": 15,
+   "operator": "arithmetic",
+   "description": "Div -> Mult",
+   "source_line": "return round(price * (1 - pct / 100), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#18",
+   "file": "inventory/pricing.py",
+   "line": 15,
+   "operator": "arithmetic",
+   "description": "Sub -> Add",
+   "source_line": "return round(price * (1 - pct / 100), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#19",
+   "file": "inventory/pricing.py",
+   "line": 15,
+   "operator": "arithmetic",
+   "description": "Mult -> Div",
+   "source_line": "return round(price * (1 - pct / 100), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#20",
+   "file": "inventory/pricing.py",
+   "line": 15,
+   "operator": "constant",
+   "description": "2 -> 3",
+   "source_line": "return round(price * (1 - pct / 100), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#21",
+   "file": "inventory/pricing.py",
+   "line": 15,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return round(price * (1 - pct / 100), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#22",
+   "file": "inventory/pricing.py",
+   "line": 19,
+   "operator": "constant",
+   "description": "1 -> 2",
+   "source_line": "return round(amount * (1 + rate), 2)",
+   "before": "killed",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#23",
+   "file": "inventory/pricing.py",
+   "line": 19,
+   "operator": "arithmetic",
+   "description": "Add -> Sub",
+   "source_line": "return round(amount * (1 + rate), 2)",
+   "before": "killed",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#24",
+   "file": "inventory/pricing.py",
+   "line": 19,
+   "operator": "arithmetic",
+   "description": "Mult -> Div",
+   "source_line": "return round(amount * (1 + rate), 2)",
+   "before": "killed",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#25",
+   "file": "inventory/pricing.py",
+   "line": 19,
+   "operator": "constant",
+   "description": "2 -> 3",
+   "source_line": "return round(amount * (1 + rate), 2)",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/pricing.py#26",
+   "file": "inventory/pricing.py",
+   "line": 19,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return round(amount * (1 + rate), 2)",
+   "before": "killed",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#27",
+   "file": "inventory/pricing.py",
+   "line": 23,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if qty <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#28",
+   "file": "inventory/pricing.py",
+   "line": 23,
+   "operator": "comparison",
+   "description": "LtE -> Lt",
+   "source_line": "if qty <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#29",
+   "file": "inventory/pricing.py",
+   "line": 25,
+   "operator": "arithmetic",
+   "description": "Mult -> Div",
+   "source_line": "gross = unit_price * qty",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/pricing.py#30",
+   "file": "inventory/pricing.py",
+   "line": 26,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return add_gst(apply_discount(gross, bulk_discount_pct(qty)))",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#0",
+   "file": "inventory/reports.py",
+   "line": 8,
+   "operator": "arithmetic",
+   "description": "Div -> Mult",
+   "source_line": "return round(sum(values) / len(values), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#1",
+   "file": "inventory/reports.py",
+   "line": 8,
+   "operator": "constant",
+   "description": "2 -> 3",
+   "source_line": "return round(sum(values) / len(values), 2)",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#2",
+   "file": "inventory/reports.py",
+   "line": 8,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return round(sum(values) / len(values), 2)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#3",
+   "file": "inventory/reports.py",
+   "line": 15,
+   "operator": "comparison",
+   "description": "In -> NotIn",
+   "source_line": "if \"sku\" in o:",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#4",
+   "file": "inventory/reports.py",
+   "line": 16,
+   "operator": "comparison",
+   "description": "NotIn -> In",
+   "source_line": "if o[\"sku\"] not in seen:",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#5",
+   "file": "inventory/reports.py",
+   "line": 17,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if o.get(\"qty\", 0) > 0:",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#6",
+   "file": "inventory/reports.py",
+   "line": 17,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if o.get(\"qty\", 0) > 0:",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#7",
+   "file": "inventory/reports.py",
+   "line": 17,
+   "operator": "comparison",
+   "description": "Gt -> GtE",
+   "source_line": "if o.get(\"qty\", 0) > 0:",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#8",
+   "file": "inventory/reports.py",
+   "line": 19,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "out[o[\"sku\"]] = out.get(o[\"sku\"], 0) + o[\"qty\"]",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#9",
+   "file": "inventory/reports.py",
+   "line": 19,
+   "operator": "arithmetic",
+   "description": "Add -> Sub",
+   "source_line": "out[o[\"sku\"]] = out.get(o[\"sku\"], 0) + o[\"qty\"]",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#10",
+   "file": "inventory/reports.py",
+   "line": 20,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return out",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#11",
+   "file": "inventory/reports.py",
+   "line": 25,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return eval(text)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#12",
+   "file": "inventory/reports.py",
+   "line": 27,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return {}",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#13",
+   "file": "inventory/reports.py",
+   "line": 36,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "total = 0",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#14",
+   "file": "inventory/reports.py",
+   "line": 38,
+   "operator": "arithmetic",
+   "description": "Add= -> Sub=",
+   "source_line": "total += o[\"qty\"]",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#15",
+   "file": "inventory/reports.py",
+   "line": 39,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return total",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#16",
+   "file": "inventory/reports.py",
+   "line": 43,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "total = 0",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/reports.py#17",
+   "file": "inventory/reports.py",
+   "line": 45,
+   "operator": "arithmetic",
+   "description": "Add= -> Sub=",
+   "source_line": "total += o[\"qty\"]",
+   "before": "survived",
+   "after": "survived"
+  },
+  {
+   "key": "inventory/reports.py#18",
+   "file": "inventory/reports.py",
+   "line": 46,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return total",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#0",
+   "file": "inventory/stock.py",
+   "line": 9,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if qty <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#1",
+   "file": "inventory/stock.py",
+   "line": 9,
+   "operator": "comparison",
+   "description": "LtE -> Lt",
+   "source_line": "if qty <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#2",
+   "file": "inventory/stock.py",
+   "line": 11,
+   "operator": "arithmetic",
+   "description": "Add -> Sub",
+   "source_line": "return level + qty",
+   "before": "killed",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#3",
+   "file": "inventory/stock.py",
+   "line": 11,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return level + qty",
+   "before": "killed",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#4",
+   "file": "inventory/stock.py",
+   "line": 15,
+   "operator": "constant",
+   "description": "0 -> 1",
+   "source_line": "if qty <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#5",
+   "file": "inventory/stock.py",
+   "line": 15,
+   "operator": "comparison",
+   "description": "LtE -> Lt",
+   "source_line": "if qty <= 0:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#6",
+   "file": "inventory/stock.py",
+   "line": 17,
+   "operator": "comparison",
+   "description": "Gt -> GtE",
+   "source_line": "if qty > level:",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#7",
+   "file": "inventory/stock.py",
+   "line": 19,
+   "operator": "arithmetic",
+   "description": "Sub -> Add",
+   "source_line": "return level - qty",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#8",
+   "file": "inventory/stock.py",
+   "line": 19,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return level - qty",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#9",
+   "file": "inventory/stock.py",
+   "line": 23,
+   "operator": "comparison",
+   "description": "LtE -> Lt",
+   "source_line": "return level <= reorder_point",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#10",
+   "file": "inventory/stock.py",
+   "line": 23,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return level <= reorder_point",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#11",
+   "file": "inventory/stock.py",
+   "line": 28,
+   "operator": "arithmetic",
+   "description": "Div -> Mult",
+   "source_line": "return round(level / daily_demand, 1)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#12",
+   "file": "inventory/stock.py",
+   "line": 28,
+   "operator": "constant",
+   "description": "1 -> 2",
+   "source_line": "return round(level / daily_demand, 1)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#13",
+   "file": "inventory/stock.py",
+   "line": 28,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return round(level / daily_demand, 1)",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#14",
+   "file": "inventory/stock.py",
+   "line": 32,
+   "operator": "arithmetic",
+   "description": "Mult -> Div",
+   "source_line": "base = daily_demand * lead_time_days",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#15",
+   "file": "inventory/stock.py",
+   "line": 33,
+   "operator": "arithmetic",
+   "description": "Mult -> Div",
+   "source_line": "return base + (base * buffer_pct) // 100",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#16",
+   "file": "inventory/stock.py",
+   "line": 33,
+   "operator": "constant",
+   "description": "100 -> 101",
+   "source_line": "return base + (base * buffer_pct) // 100",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#17",
+   "file": "inventory/stock.py",
+   "line": 33,
+   "operator": "arithmetic",
+   "description": "Add -> Sub",
+   "source_line": "return base + (base * buffer_pct) // 100",
+   "before": "survived",
+   "after": "killed"
+  },
+  {
+   "key": "inventory/stock.py#18",
+   "file": "inventory/stock.py",
+   "line": 33,
+   "operator": "return",
+   "description": "return value -> None",
+   "source_line": "return base + (base * buffer_pct) // 100",
+   "before": "survived",
+   "after": "killed"
+  }
+ ]
+}

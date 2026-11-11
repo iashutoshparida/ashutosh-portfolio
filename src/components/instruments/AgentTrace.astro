@@ -1,0 +1,208 @@
+---
+// I-5 GrowthPilot agent trace. Featured day is rendered at build time with the same renderer the client uses.
+import '../../styles/instruments.css';
+import EvidenceStamp from '../EvidenceStamp.astro';
+import raw from '../../data/growthpilot-trace.json';
+import { renderDay, type Trace } from '../../instruments/trace-render';
+import type { Metric } from '../../lib/schemas';
+interface Props {
+  metric: Metric;
+}
+const { metric } = Astro.props;
+const trace = raw as unknown as Trace;
+const day = trace.days.find((d) => d.day === trace.featured_day)!;
+const max = trace.days.length;
+---
+
+<figure class="inst trace" data-instrument="trace" aria-labelledby="trace-title">
+  <div class="inst__head">
+    <p class="t-label" id="trace-title">Instrument · One simulated month, replayed day by day</p>
+    <div class="inst__head-meta">
+      <EvidenceStamp evidenceId={metric.evidence} method={metric.method} source={metric.source} />
+      <a class="t-label link-u" href={trace.meta.source_repo} rel="noopener">Source ↗</a>
+    </div>
+  </div>
+
+  <div class="trace__controls">
+    <p class="t-h3" data-trace-label>Day {day.day} of {max}</p>
+    <div class="trace__nav js-only">
+      <button type="button" class="btn" data-trace-prev>◀ Prev day</button>
+      <label class="visually-hidden" for="trace-day">Choose a day</label>
+      <select id="trace-day" class="trace__select t-label" data-trace-select>
+        {trace.days.map((d) => <option value={d.day} selected={d.day === day.day}>Day {d.day}</option>)}
+      </select>
+      <button type="button" class="btn" data-trace-next>Next day ▶</button>
+    </div>
+  </div>
+
+  <div class="trace__out" data-trace-out set:html={renderDay(day, trace.guardrails)} />
+
+  <p class="visually-hidden" aria-live="polite" data-live></p>
+
+  <figcaption class="inst__caption">
+    Simulated players and channels. No real ad spend. The reviewer in the simulator is a stub that always approves.
+  </figcaption>
+</figure>
+
+<script src="../../scripts/instruments.ts"></script>
+
+<style>
+  .trace__controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .trace__nav {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .trace__select {
+    min-height: 44px;
+    border: var(--rule);
+    background: var(--paper);
+    padding: 0 var(--space-3);
+    border-radius: 0;
+  }
+  .trace__out :global(.tr-steps) {
+    display: grid;
+    border-top: var(--rule);
+  }
+  .trace__out :global(.tr-step) {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--space-5);
+    padding-block: var(--space-4);
+    border-bottom: var(--rule-soft);
+  }
+  .trace__out :global(.tr-step__name) {
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .trace__out :global(.tr-step__name span) {
+    color: var(--graphite);
+    margin-right: var(--space-2);
+  }
+  .trace__out :global(.tr-step__body) {
+    display: grid;
+    gap: var(--space-3);
+    min-width: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-data);
+  }
+  .trace__out :global(.tr-note),
+  .trace__out :global(.tr-empty) {
+    color: var(--graphite);
+  }
+  .trace__out :global(.tr-quote) {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+  }
+  .trace__out :global(.tr-table) {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 560px;
+    text-align: left;
+  }
+  .trace__out :global(.tr-table th),
+  .trace__out :global(.tr-table td) {
+    padding: var(--space-1) var(--space-3) var(--space-1) 0;
+    border-bottom: var(--rule-soft);
+    font-weight: 400;
+  }
+  .trace__out :global(.tr-table thead th) {
+    color: var(--graphite);
+  }
+  .trace__out :global(.tr-kv) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+  }
+  .trace__out :global(.tr-kv div) {
+    display: flex;
+    gap: var(--space-2);
+  }
+  .trace__out :global(.tr-kv dt) {
+    color: var(--graphite);
+  }
+  .trace__out :global(.tr-bars) {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .trace__out :global(.tr-bars__key) {
+    color: var(--graphite);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .trace__out :global(.tr-key) {
+    display: inline-block;
+    width: 18px;
+    height: 8px;
+  }
+  .trace__out :global(.tr-key--a),
+  .trace__out :global(.tr-bars__a) {
+    background: var(--rule-faint);
+    border: 1px solid var(--graphite);
+  }
+  .trace__out :global(.tr-key--b),
+  .trace__out :global(.tr-bars__b) {
+    background: var(--ink);
+  }
+  .trace__out :global(.tr-key--b) {
+    margin-left: var(--space-3);
+  }
+  .trace__out :global(.tr-bars__row) {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr) 210px;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .trace__out :global(.tr-bars__track) {
+    display: grid;
+    gap: 2px;
+  }
+  .trace__out :global(.tr-bars__a),
+  .trace__out :global(.tr-bars__b) {
+    display: block;
+    height: 8px;
+  }
+  .trace__out :global(.tr-violations) {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .trace__out :global(.tr-violations li) {
+    color: var(--signal);
+  }
+  .trace__out :global(.tr-violations li::before) {
+    content: '✕ ';
+  }
+  .trace__out :global(.needs-approval .tr-approval) {
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    padding: var(--space-2) var(--space-3);
+    justify-self: start;
+  }
+  @media (max-width: 767px) {
+    .trace__out :global(.tr-step) {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .trace__out :global(.tr-bars__row) {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+    .trace__nav {
+      width: 100%;
+    }
+    .trace__nav .btn {
+      flex: 1;
+    }
+  }
+</style>

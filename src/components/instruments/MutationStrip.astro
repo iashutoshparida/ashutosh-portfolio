@@ -1,0 +1,246 @@
+---
+// I-4 CodePilot mutation strip. 90 cells grouped by file, then operator; "Before" rendered at build time.
+import '../../styles/instruments.css';
+import EvidenceStamp from '../EvidenceStamp.astro';
+import data from '../../data/codepilot-mutation.json';
+import type { Metric } from '../../lib/schemas';
+interface Props {
+  metric: Metric;
+}
+const { metric } = Astro.props;
+const killed = (s: string) => s === 'killed' || s === 'timeout';
+const OP_ORDER = ['return', 'comparison', 'arithmetic', 'constant', 'logical', 'negation'];
+const indexed = data.mutants.map((m, i) => ({ ...m, i }));
+const files = [...new Set(indexed.map((m) => m.file))];
+const groups = files.map((file) => {
+  const ops = OP_ORDER.map((op) => ({ op, cells: indexed.filter((m) => m.file === file && m.operator === op) })).filter(
+    (g) => g.cells.length,
+  );
+  return { file, ops };
+});
+const missing = data.mutants.length - groups.reduce((n, g) => n + g.ops.reduce((k, o) => k + o.cells.length, 0), 0);
+if (missing !== 0) throw new Error(`MutationStrip: ${missing} mutants have an operator outside OP_ORDER`);
+const survivors = data.mutants.filter((m) => !killed(m.after));
+const b = data.summary.before;
+const a = data.summary.after;
+const bugs = data.summary.bugs_caught;
+---
+
+<figure class="inst mut" data-instrument="mutation" aria-labelledby="mut-title">
+  <div class="inst__head">
+    <p class="t-label" id="mut-title">Instrument · 90 deliberate bugs in the sample app</p>
+    <div class="inst__head-meta">
+      <EvidenceStamp evidenceId={metric.evidence} method={metric.method} source={metric.source} />
+      <a class="t-label link-u" href={data.meta.source_repo} rel="noopener">Source ↗</a>
+    </div>
+  </div>
+
+  <div class="mut__top">
+    <div class="inst__controls js-only">
+      <div class="seg" role="group" aria-label="Test suite">
+        <button type="button" data-phase="before" aria-pressed="true">Before</button>
+        <button type="button" data-phase="after" aria-pressed="false">After generated tests</button>
+      </div>
+    </div>
+    <div class="mut__readouts">
+      <p class="t-proof" data-readout data-claim>{b.display.killed} · {b.display.score}</p>
+      <p class="t-data">Planted bugs caught: {bugs.before} / {bugs.total} → {bugs.after} / {bugs.total}</p>
+    </div>
+  </div>
+
+  <div class="mut__stage" data-stage>
+    <div class="mut__legend t-data graphite" aria-hidden="true">
+      <span><i class="mut__cell is-killed"></i> killed (a test failed)</span>
+      <span><i class="mut__cell"></i> survived (no test noticed)</span>
+    </div>
+    <div class="mut__files" role="group" aria-label="Mutants by file and operator. Use arrow keys to move between them.">
+      {
+        groups.map((g) => (
+          <div class="mut__file">
+            <p class="mut__fname t-data">{g.file}</p>
+            <div class="mut__ops">
+              {g.ops.map((o) => (
+                <div class="mut__op">
+                  <span class="mut__oplabel t-label graphite">{o.op}</span>
+                  <span class="mut__cells">
+                    {o.cells.map((m) => (
+                      <button
+                        type="button"
+                        class:list={['mut__cell', { 'is-killed': killed(m.before) }]}
+                        data-cell={m.i}
+                        tabindex="-1"
+                        aria-label={`${m.file}:${m.line}, ${m.operator}: ${m.description}. Before: ${m.before}. After: ${m.after}.`}
+                      ></button>
+                    ))}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+    <div class="mut__tip t-data" data-tip role="tooltip" hidden></div>
+  </div>
+
+  <p class="visually-hidden" aria-live="polite" data-live></p>
+
+  <noscript>
+    <table class="inst__fallback">
+      <caption class="visually-hidden">Mutation score before and after generated tests</caption>
+      <thead><tr><th scope="col">Suite</th><th scope="col">Mutants killed</th><th scope="col">Score</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Before</th><td>{b.display.killed}</td><td>{b.display.score}</td></tr>
+        <tr><th scope="row">After generated tests</th><td>{a.display.killed}</td><td>{a.display.score}</td></tr>
+      </tbody>
+    </table>
+    <table class="inst__fallback">
+      <caption class="t-label">The {survivors.length} mutants that still survive</caption>
+      <thead><tr><th scope="col">Location</th><th scope="col">Operator</th><th scope="col">Change</th><th scope="col">Source line</th></tr></thead>
+      <tbody>
+        {
+          survivors.map((m) => (
+            <tr>
+              <td>{m.file}:{m.line}</td>
+              <td>{m.operator}</td>
+              <td>{m.description}</td>
+              <td><code>{m.source_line}</code></td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </noscript>
+
+  <figcaption class="inst__caption">
+    Each square is one small change to the sample app's code. Filled means a test failed and caught it; outlined means every test still passed. Focus or hover a square to see the change.
+  </figcaption>
+</figure>
+
+<script src="../../scripts/instruments.ts"></script>
+
+<style>
+  .mut__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: var(--space-4);
+  }
+  .mut__readouts {
+    display: grid;
+    gap: var(--space-2);
+    text-align: right;
+  }
+  .mut__stage {
+    position: relative;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .mut__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+  }
+  .mut__legend span {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+  }
+  .mut__files {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .mut__file {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-4);
+    align-items: start;
+    padding-block: var(--space-3);
+    border-top: var(--rule-soft);
+  }
+  .mut__ops {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+  }
+  .mut__op {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .mut__oplabel {
+    font-size: 10px;
+  }
+  .mut__cells {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .mut__cell {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+  .mut__cell.is-killed {
+    background: var(--ink);
+  }
+  .mut__cell:hover,
+  .mut__cell:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+  i.mut__cell {
+    width: 14px;
+    height: 14px;
+    cursor: default;
+  }
+  .mut__tip {
+    position: absolute;
+    z-index: 5;
+    width: min(420px, 100%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: var(--space-3) var(--space-4);
+    display: grid;
+    gap: var(--space-1);
+    pointer-events: none;
+  }
+  .mut__tip[hidden] {
+    display: none;
+  }
+  .mut__tip :global(.tip__loc) {
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .mut__tip :global(.tip__src) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    border-left: 2px solid var(--paper);
+    padding-left: var(--space-2);
+  }
+  @media (max-width: 767px) {
+    .mut__file {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .mut__readouts {
+      text-align: left;
+    }
+    .mut__cell {
+      width: 26px;
+      height: 26px;
+    }
+    .seg {
+      width: 100%;
+    }
+    .seg button {
+      flex: 1;
+    }
+  }
+</style>
