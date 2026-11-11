@@ -1,0 +1,16 @@
+---
+interface Props {
+  number: string;
+  title: string;
+  id: string;
+}
+const { number, title, id } = Astro.props;
+---
+
+<h2 class="t-h2 section-head" id={id}>{number} — {title}</h2>
+
+<style>
+  .section-head {
+    margin-bottom: var(--space-6);
+  }
+</style>

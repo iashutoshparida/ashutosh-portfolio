@@ -1,0 +1,47 @@
+---
+import { about } from '../lib/data';
+---
+
+<ul class="exp">
+  {
+    about.experience.map((e) => (
+      <li class="exp__row">
+        <span class="t-label">{e.dates}</span>
+        <span class="exp__role">
+          {e.pending ? (
+            <>
+              {e.role.replace(/\s*\[[^\]]+\]\s*$/, '')} <span class="pending">{(e.role.match(/\[[^\]]+\]/) ?? ['[PENDING]'])[0]}</span>
+            </>
+          ) : (
+            e.role
+          )}
+        </span>
+        <span>{e.org}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .exp__row {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+    padding: var(--space-4) 0;
+    border-top: var(--rule-soft);
+    font-size: 18px;
+  }
+  .exp__row:first-child {
+    border-top: var(--rule);
+  }
+  .exp__role {
+    font-weight: 600;
+  }
+  @media (max-width: 767px) {
+    .exp__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>

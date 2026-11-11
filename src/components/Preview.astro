@@ -1,0 +1,62 @@
+---
+// Decorative index previews (lg only), drawn from each flagship's instrument data or concept.
+import mutation from '../data/codepilot-mutation.json';
+import leak from '../data/pressure-vit-leakage.json';
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const cells = mutation.mutants.map((m) => m.after === 'killed' || m.after === 'timeout');
+const loso = leak.splits.loso.accuracy * 100;
+const rnd = leak.splits.random_frames.accuracy * 100;
+---
+
+<svg viewBox="0 0 240 160" aria-hidden="true" focusable="false" class="preview-svg">
+  {
+    slug === 'quality-tooling' &&
+      cells.map((k, i) => (
+        <rect
+          x={4 + (i % 15) * 15.6}
+          y={14 + Math.floor(i / 15) * 22}
+          width="11"
+          height="14"
+          fill={k ? '#111111' : 'none'}
+          stroke="#111111"
+          stroke-width="1"
+        />
+      ))
+  }
+  {
+    slug === 'growth-agents' &&
+      ['OBSERVE', 'ESTIMATE', 'PROPOSE', 'GUARDRAIL', 'ALLOCATE', 'APPROVE'].map((s, i) => (
+        <g>
+          <rect x="8" y={10 + i * 24} width="14" height="14" fill={s === 'GUARDRAIL' ? '#C8361A' : '#111111'} />
+          <text x="32" y={21 + i * 24} font-family="IBM Plex Mono, monospace" font-size="11" fill="#111111">
+            {s}
+          </text>
+          {i < 5 && <line x1="15" y1={24 + i * 24} x2="15" y2={34 + i * 24} stroke="#111111" />}
+        </g>
+      ))
+  }
+  {
+    slug === 'pressure-vit' && (
+      <g>
+        <rect x="6" y="40" width={(228 * rnd) / 100} height="24" fill="#111111" />
+        <rect x="6" y="92" width={(228 * loso) / 100} height="24" fill="#111111" />
+        <line x1={6 + (228 * loso) / 100} y1="28" x2={6 + (228 * loso) / 100} y2="128" stroke="#C8361A" stroke-width="2" />
+        <text x="6" y="34" font-family="IBM Plex Mono, monospace" font-size="10" fill="#111111">RANDOM FRAMES</text>
+        <text x="6" y="86" font-family="IBM Plex Mono, monospace" font-size="10" fill="#111111">UNSEEN PEOPLE</text>
+      </g>
+    )
+  }
+  {
+    slug === 'digital-mirror' && (
+      <g>
+        <rect x="88" y="6" width="64" height="148" fill="none" stroke="#111111" stroke-width="1.5" />
+        <rect x="96" y="104" width="48" height="34" fill="#F3F1EC" stroke="#111111" />
+        <text x="100" y="118" font-family="IBM Plex Mono, monospace" font-size="7" fill="#111111">WINDING</text>
+        <text x="100" y="129" font-family="IBM Plex Mono, monospace" font-size="7" fill="#111111">DOWN?</text>
+      </g>
+    )
+  }
+</svg>

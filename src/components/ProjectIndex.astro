@@ -1,0 +1,289 @@
+---
+// I-2: lens filter + index (+ CSS-only aside preview on lg). Without JS: all rows visible; chips jump to a by-lens list.
+import EvidenceStamp from './EvidenceStamp.astro';
+import Preview from './Preview.astro';
+import { LENSES, lensCounts, indexResult, lensLabel, href, type ProjectEntry } from '../lib/data';
+
+interface Props {
+  projects: ProjectEntry[];
+  grouped?: boolean;
+  preview?: boolean;
+  idPrefix?: string;
+}
+const { projects, grouped = false, preview = true, idPrefix = 'idx' } = Astro.props;
+const counts = lensCounts(projects);
+const groups = grouped
+  ? [
+      { title: 'Flagship', items: projects.filter((p) => p.data.tier === 'flagship') },
+      { title: 'Supporting', items: projects.filter((p) => p.data.tier === 'supporting') },
+    ]
+  : [{ title: '', items: projects }];
+const flagships = projects.filter((p) => p.data.tier === 'flagship');
+---
+
+<div class="pindex" data-pindex data-total={projects.length}>
+  <div class="pindex__filter" role="group" aria-label="Filter projects by lens">
+    {
+      LENSES.map((l) => (
+        <a
+          class="chip t-label"
+          href={`#${idPrefix}-lens-${l.id}`}
+          data-lens={l.id}
+          role="button"
+          aria-pressed={l.id === 'all' ? 'true' : 'false'}
+        >
+          {l.label}
+          <span class="chip__count">{counts[l.id]}</span>
+        </a>
+      ))
+    }
+  </div>
+  <p class="visually-hidden" aria-live="polite" data-pindex-status></p>
+
+  <div class:list={['pindex__body', { 'has-preview': preview }]}>
+    <div class="pindex__table">
+      <div class="pindex__head t-label graphite" aria-hidden="true">
+        <span>No.</span><span>Project</span><span>Question</span><span>Lens</span><span>Result</span><span>Year</span>
+      </div>
+      {
+        groups.map((g) => (
+          <div class="pindex__group" data-group>
+            {g.title && <h3 class="pindex__group-title t-label">{g.title}</h3>}
+            <ul>
+              {g.items.map((p) => {
+                const r = indexResult(p);
+                const n = p.data.number;
+                return (
+                  <li data-lenses={p.data.lenses.join(' ')}>
+                    <a class="row" href={href(`/work/${p.data.slug}/`)} data-i={p.data.slug}>
+                      <span class="row__no t-label">{n ?? '—'}</span>
+                      <span class="row__title" style={`view-transition-name: title-${p.data.slug}`}>
+                        {p.data.title}
+                      </span>
+                      <span class="row__q">{p.data.question}</span>
+                      <span class="row__lens t-label">{p.data.lenses.map(lensLabel).join(' · ')}</span>
+                      <span class="row__result">
+                        <span class="row__value">{p.data.slug === 'digital-mirror' ? '57' : r.value}</span>
+                        {r.evidence && <EvidenceStamp evidenceId={r.evidence} />}
+                      </span>
+                      <span class="row__year t-label">{p.data.year ?? '—'}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    {
+      preview && (
+        <div class="pindex__aside" aria-hidden="true">
+          {flagships.map((p) => (
+            <div class="preview" data-i={p.data.slug}>
+              <Preview slug={p.data.slug} />
+              <span class="t-label">{p.data.title}</span>
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <noscript>
+    <div class="pindex__nojs">
+      {
+        LENSES.map((l) => (
+          <section id={`${idPrefix}-lens-${l.id}`}>
+            <h3 class="t-label">
+              {l.label} ({counts[l.id]})
+            </h3>
+            <ul>
+              {projects
+                .filter((p) => l.id === 'all' || p.data.lenses.includes(l.id as never))
+                .map((p) => (
+                  <li>
+                    <a class="link-u" href={href(`/work/${p.data.slug}/`)}>
+                      {p.data.title}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </noscript>
+</div>
+
+<script src="../scripts/lens-filter.ts"></script>
+
+<style>
+  .pindex__filter {
+    display: flex;
+    border: var(--rule);
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: 0 var(--space-4);
+    border-left: var(--rule);
+    scroll-snap-align: start;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .chip:first-child {
+    border-left: 0;
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .chip:not([aria-pressed='true']):hover {
+    background: var(--paper-deep);
+  }
+  .chip__count {
+    opacity: 0.7;
+  }
+  .pindex__body {
+    margin-top: var(--space-6);
+  }
+  .pindex__body.has-preview {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: var(--space-6);
+  }
+  .pindex__head,
+  .row {
+    display: grid;
+    grid-template-columns: 48px minmax(150px, 0.9fr) minmax(0, 2fr) 128px minmax(170px, 1fr) 48px;
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+  .pindex__head {
+    padding: var(--space-3) 0;
+    border-bottom: var(--rule);
+  }
+  .pindex__group-title {
+    padding: var(--space-5) 0 var(--space-2);
+  }
+  .row {
+    padding: var(--space-5) 0;
+    border-bottom: var(--rule-soft);
+    transition: background-color var(--dur-fast) linear;
+  }
+  .row__title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .row__q {
+    font-size: 20px;
+    line-height: 1.3;
+  }
+  .row__result {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+  .row__value {
+    font-weight: 700;
+  }
+  .row:hover .row__no,
+  .row:focus-visible .row__no {
+    color: var(--signal);
+  }
+  .row:hover .row__title,
+  .row:focus-visible .row__title {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  li[hidden] {
+    display: none;
+  }
+  .pindex__aside {
+    position: relative;
+  }
+  .preview {
+    position: sticky;
+    top: var(--space-6);
+    display: grid;
+    gap: var(--space-2);
+    opacity: 0;
+    transition: opacity var(--dur-fast) linear;
+    grid-area: 1 / 1;
+  }
+  .pindex__aside {
+    display: grid;
+  }
+  .preview-svg {
+    width: 100%;
+    height: auto;
+    border: var(--rule);
+    background: var(--paper);
+  }
+  .pindex:has(.row[data-i='quality-tooling']:is(:hover, :focus-visible)) .preview[data-i='quality-tooling'],
+  .pindex:has(.row[data-i='growth-agents']:is(:hover, :focus-visible)) .preview[data-i='growth-agents'],
+  .pindex:has(.row[data-i='pressure-vit']:is(:hover, :focus-visible)) .preview[data-i='pressure-vit'],
+  .pindex:has(.row[data-i='digital-mirror']:is(:hover, :focus-visible)) .preview[data-i='digital-mirror'] {
+    opacity: 1;
+  }
+  .pindex__nojs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+    border-top: var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (max-width: 1199px) {
+    .pindex__body.has-preview {
+      display: block;
+    }
+    .pindex__aside {
+      display: none;
+    }
+    .pindex__head,
+    .row {
+      grid-template-columns: 40px minmax(130px, 0.8fr) minmax(0, 1.6fr) minmax(150px, 1fr);
+    }
+    .row__lens,
+    .row__year,
+    .pindex__head span:nth-child(4),
+    .pindex__head span:nth-child(6) {
+      display: none;
+    }
+    .row__q {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  @media (max-width: 767px) {
+    .pindex__head {
+      display: none;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .row__title {
+      font-size: 22px;
+    }
+    .row__q {
+      white-space: normal;
+      font-size: 17px;
+    }
+    .pindex__filter {
+      width: auto;
+    }
+  }
+</style>

@@ -1,0 +1,325 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EvidenceStamp from '../components/EvidenceStamp.astro';
+import ProjectIndex from '../components/ProjectIndex.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import ContactBlock from '../components/ContactBlock.astro';
+import { site, about, getProjects, getFlagships, getLab, getMetric, href } from '../lib/data';
+
+const projects = await getProjects();
+const flagships = await getFlagships();
+const lab = await getLab();
+const proof = await Promise.all(site.proof_strip.map((p) => getMetric(p.project, p.metric_id)));
+const sportsSec = about.leadership.find((l) => /Sports Secretary/.test(l.role));
+const c = site.contact;
+---
+
+<BaseLayout
+  title={site.name}
+  description={`${site.name}: ${site.descriptor.join(', ')}. ${site.statement.join(' ')}`}
+  footerContact={false}
+>
+  <div class="wrap">
+    <p class="now t-label graphite">Now — {site.now}</p>
+
+    <section class="hero grid" aria-label="Introduction">
+      <h1 class="hero__name t-display">
+        <span>{site.name.split(' ')[0]}</span>
+        <span>{site.name.split(' ').slice(1).join(' ')}</span>
+      </h1>
+      <div class="hero__aside">
+        <ul class="hero__desc">
+          {site.descriptor.map((d) => <li class="t-label">{d}</li>)}
+          <li class="t-label graphite">{site.institution_line}</li>
+        </ul>
+        <div class="hero__buttons">
+          {c.cv.placeholder ? <span class="btn btn--placeholder">{c.cv.display}</span> : <a class="btn btn--solid" href={c.cv.value}>CV ↓</a>}
+          <a class="btn" href={c.github.value} rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+      <p class="hero__statement t-statement">
+        {site.statement[0]}<br /><span class="graphite">{site.statement[1]}<br />{site.statement[2]}</span>
+      </p>
+    </section>
+
+    <section class="proof" aria-label="Proof">
+      {
+        proof.map(({ project, metric }) => (
+          <div class="proof__item">
+            <a class="proof__link" href={href(`/work/${project.data.slug}/#results`)}>
+              <span class="t-proof" data-claim>
+                {metric.value}
+              </span>
+              <span class="proof__label">{metric.label}</span>
+            </a>
+            <span>
+              <EvidenceStamp evidenceId={metric.evidence} method={metric.method} source={metric.source} />
+            </span>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="section grid" aria-labelledby="intro-h">
+      <h2 class="lane-margin t-label" id="intro-h">01 — Introduction</h2>
+      <p class="lane-text intro">{site.intro}</p>
+      <p class="lane-aside t-label graphite aside-note">
+        Every number on this site carries a label saying how it was measured. Select a label to see the method.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="work-h">
+      <SectionHead number="02" title="Selected work" id="work-h" />
+      <ProjectIndex projects={flagships} idPrefix="home" />
+      <p class="all-work t-label"><a class="link-u" href={href('/work/')}>All work ({projects.length}) →</a></p>
+    </section>
+
+    <section class="section" aria-labelledby="how-h">
+      <SectionHead number="03" title="How I work" id="how-h" />
+      <div class="principles">
+        {
+          about.how_i_work.map((p) => (
+            <div class="principle">
+              <h3 class="principle__title">{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section grid lab-teaser" aria-labelledby="lab-h">
+      <h2 class="lane-margin t-label" id="lab-h">04 — From the lab</h2>
+      <ul class="lab-teaser__list">
+        {
+          lab.map((l) => (
+            <li>
+              <a class="lab-teaser__title" href={href(`/lab/${l.data.slug}/`)}>
+                {l.data.title}
+              </a>
+              {l.data.team && <span class="t-small graphite">With {l.data.team.match(/Prahlad M\. V\./) ? 'Prahlad M. V. (semester 1)' : l.data.team}</span>}
+              <span>
+                <EvidenceStamp evidenceId={l.data.evidence} />
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="lab-teaser__more t-label link-u" href={href('/lab/')}>Lab →</a>
+    </section>
+
+    <section class="section" aria-labelledby="exp-h">
+      <SectionHead number="05" title="Experience" id="exp-h" />
+      <ExperienceList />
+    </section>
+
+    <section class="section grid" aria-labelledby="off-h">
+      <h2 class="lane-margin t-label" id="off-h">06 — Off the clock</h2>
+      <ul class="lane-wide off">
+        {sportsSec && <li>{sportsSec.role}, {sportsSec.org}. {sportsSec.note}</li>}
+        {about.off_the_clock.map((o) => <li>{o}</li>)}
+      </ul>
+    </section>
+
+    <div class="section">
+      <ContactBlock size="large" />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .now {
+    padding: var(--space-3) 0;
+    border-bottom: var(--rule-soft);
+  }
+  .hero {
+    padding-block: var(--space-8) var(--space-7);
+    row-gap: var(--space-7);
+  }
+  .hero__name {
+    grid-column: 1 / span 9;
+    display: flex;
+    flex-direction: column;
+    overflow-wrap: anywhere;
+  }
+  .hero__aside {
+    grid-column: 10 / span 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+  .hero__desc {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .hero__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .hero__statement {
+    grid-column: 1 / span 9;
+  }
+  .proof {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: var(--rule);
+    border-bottom: var(--rule);
+  }
+  .proof__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--space-5);
+    border-left: var(--rule);
+  }
+  .proof__item:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .proof__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .proof__link:hover .t-proof {
+    color: var(--signal);
+  }
+  .proof__label {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .intro {
+    font-size: 24px;
+    line-height: 1.45;
+  }
+  .all-work {
+    margin-top: var(--space-5);
+    text-align: right;
+  }
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+  .principle {
+    border-top: var(--rule);
+    padding-top: var(--space-4);
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+  .principle__title {
+    font-size: 28px;
+    font-weight: 800;
+    font-variation-settings: 'wdth' 75;
+    font-stretch: 75%;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .lab-teaser__list {
+    grid-column: 3 / span 8;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+  .lab-teaser__list li {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+  }
+  .lab-teaser__title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .lab-teaser__title:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .lab-teaser__more {
+    grid-column: 11 / span 2;
+    justify-self: end;
+    align-self: start;
+  }
+  .off {
+    display: grid;
+    gap: var(--space-2);
+    font-size: 22px;
+    line-height: 1.45;
+  }
+  @media (max-width: 1199px) {
+    .hero__name,
+    .hero__statement,
+    .hero__aside {
+      grid-column: 1 / -1;
+    }
+    .hero__aside {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .lab-teaser__list {
+      grid-column: 3 / -1;
+    }
+    .lab-teaser__more {
+      grid-column: 3 / -1;
+      justify-self: start;
+      margin-top: var(--space-4);
+    }
+  }
+  @media (max-width: 767px) {
+    .hero {
+      padding-block: var(--space-6) var(--space-6);
+      row-gap: var(--space-5);
+    }
+    .hero__name {
+      font-size: 18vw;
+    }
+    .hero__aside {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .hero__buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .proof {
+      grid-template-columns: 1fr;
+    }
+    .proof__item {
+      border-left: 0;
+      border-top: var(--rule);
+      padding: var(--space-4) 0;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .proof__item:first-child {
+      border-top: 0;
+    }
+    .proof .t-proof {
+      font-size: 32px;
+    }
+    .proof__label {
+      font-size: 14px;
+    }
+    .intro {
+      font-size: 20px;
+    }
+    .principles,
+    .lab-teaser__list {
+      grid-template-columns: 1fr;
+      grid-column: 1 / -1;
+    }
+    .lab-teaser__more {
+      grid-column: 1 / -1;
+    }
+    .off {
+      font-size: 19px;
+    }
+  }
+</style>

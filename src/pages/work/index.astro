@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectIndex from '../../components/ProjectIndex.astro';
+import { getProjects } from '../../lib/data';
+const projects = await getProjects();
+const flag = projects.filter((p) => p.data.tier === 'flagship').length;
+---
+
+<BaseLayout
+  title="Work"
+  current="work"
+  og="work"
+  description={`All ${projects.length} projects by Ashutosh Parida: ${flag} flagship case studies and ${projects.length - flag} supporting briefs, each number labelled with how it was measured.`}
+>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="t-label">01 · Index</p>
+      <h1 class="t-h1">Work</h1>
+      <p class="page-head__lede">
+        {projects.length} projects. {flag} are full reports; the rest are short briefs. Filter by the lens you care about.
+      </p>
+    </header>
+    <section class="section" aria-label="Projects">
+      <ProjectIndex projects={projects} grouped idPrefix="work" />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: var(--space-8) var(--space-7);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .page-head__lede {
+    max-width: var(--measure);
+    font-size: 20px;
+  }
+</style>
