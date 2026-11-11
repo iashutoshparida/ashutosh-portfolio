@@ -1,0 +1,92 @@
+---
+import EvidenceStamp from './EvidenceStamp.astro';
+import type { Metric } from '../lib/schemas';
+interface Props {
+  metrics: Metric[];
+  caption: string;
+}
+const { metrics, caption } = Astro.props;
+---
+
+<table class="results">
+  <caption class="visually-hidden">{caption}</caption>
+  <thead>
+    <tr class="t-label graphite">
+      <th scope="col">Metric</th>
+      <th scope="col">Value</th>
+      <th scope="col">Evidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      metrics.map((m) => (
+        <tr>
+          <th scope="row">{m.label}</th>
+          <td data-claim>
+            <span class="results__value">{m.value}</span>
+            {m.detail && <span class="results__detail graphite">{m.detail}</span>}
+          </td>
+          <td>
+            <EvidenceStamp evidenceId={m.evidence} method={m.method} source={m.source} />
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .results {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .results th,
+  .results td {
+    padding: var(--space-4) var(--space-4) var(--space-4) 0;
+    border-bottom: var(--rule-soft);
+    vertical-align: top;
+  }
+  .results thead th {
+    border-bottom: var(--rule);
+    padding-block: var(--space-3);
+    font-weight: 500;
+  }
+  .results tbody th {
+    font-weight: 400;
+    width: 46%;
+  }
+  .results__value {
+    display: block;
+    font-weight: 700;
+  }
+  .results__detail {
+    display: block;
+    font-size: var(--fs-small);
+    margin-top: var(--space-1);
+  }
+  @media (max-width: 767px) {
+    .results thead {
+      display: none;
+    }
+    .results,
+    .results tbody,
+    .results tr,
+    .results th,
+    .results td {
+      display: block;
+      width: auto;
+    }
+    .results tr {
+      padding: var(--space-4) 0;
+      border-bottom: var(--rule-soft);
+    }
+    .results th,
+    .results td,
+    .results tbody th {
+      border: 0;
+      width: auto;
+      padding: 0 0 var(--space-2);
+    }
+  }
+</style>

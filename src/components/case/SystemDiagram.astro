@@ -1,0 +1,167 @@
+---
+// Inline system diagrams drawn from each project's "## System" text (ASSET_MANIFEST §2). HTML, not an image,
+// so it reflows on small screens and reads as an ordered list to assistive tech.
+interface Props {
+  slug: string;
+}
+type Node = { k: string; t: string; d?: string; flag?: boolean };
+type Diagram = { title: string; lanes: { label?: string; nodes: Node[] }[]; note?: string };
+
+const diagrams: Record<string, Diagram> = {
+  'pressure-vit': {
+    title: 'From pressure map to sleeping position',
+    lanes: [
+      {
+        nodes: [
+          { k: 'Input', t: 'Pressure map', d: 'One frame from the mat under the mattress' },
+          { k: 'Embed', t: 'Patches + position', d: 'Patch embedding with positional information' },
+          { k: 'Model', t: 'Transformer encoder', d: '141,457 parameters, written from scratch' },
+          { k: 'Output', t: '17 positions', d: 'Also a 3-posture variant' },
+        ],
+      },
+      {
+        label: 'Checks',
+        nodes: [
+          { k: 'Baseline', t: 'CNN' },
+          { k: 'Baseline', t: 'Logistic regression' },
+          { k: 'Diagnostic', t: 'Attention rollout', d: 'Where the model looks' },
+          { k: 'Evaluation', t: 'Whole people held out', d: 'Person-level bootstrap CI', flag: true },
+        ],
+      },
+    ],
+  },
+  'quality-tooling': {
+    title: 'Three tools around a developer’s day',
+    lanes: [
+      {
+        label: 'Writing code',
+        nodes: [
+          { k: 'CodePilot', t: 'Find unprotected functions', d: 'Parse code, build call graphs' },
+          { k: 'CodePilot', t: 'Generate tests', d: 'LLM optional, always verified' },
+          { k: 'Gate', t: 'Keep only if safe, passing and stable', flag: true },
+        ],
+      },
+      {
+        label: 'Opening a PR',
+        nodes: [
+          { k: 'PR Risk Analyzer', t: '18 explainable rules', d: 'Unsafe calls, signature changes with callers, deep nesting…' },
+          { k: 'Output', t: 'Reviewer-facing comment', d: 'Runs as a GitHub Action' },
+        ],
+      },
+      {
+        label: 'Running CI',
+        nodes: [
+          { k: 'TestLedger', t: 'Store every result over time' },
+          { k: 'TestLedger', t: 'Score flakiness from flip patterns' },
+          { k: 'Gate', t: 'Quarantine flaky tests, keep real regressions visible', flag: true },
+        ],
+      },
+    ],
+  },
+  'growth-agents': {
+    title: 'One day of GrowthPilot, plus CreativeLab',
+    lanes: [
+      {
+        label: 'GrowthPilot',
+        nodes: [
+          { k: 'Analyst', t: 'Predicted 30-day revenue', d: 'LightGBM pLTV on cohorts with 3 days of play' },
+          { k: 'Planner', t: 'Tomorrow’s split + rationale', d: 'Thompson sampling' },
+          { k: 'Critic', t: 'Hard guardrails', d: 'Daily ceiling · ±20% per channel · ≥5% per channel', flag: true },
+          { k: 'Human', t: 'Approval if >8% of budget moves', flag: true },
+        ],
+      },
+      {
+        label: 'CreativeLab',
+        nodes: [
+          { k: 'Plan', t: '40 variants' },
+          { k: 'Write + filter', t: 'Copy; reject policy breaks', flag: true },
+          { k: 'Score', t: 'XGBoost CTR model' },
+          { k: 'Test', t: 'Top 8 with a bandit' },
+        ],
+      },
+    ],
+  },
+};
+const d = diagrams[Astro.props.slug];
+---
+
+{
+  d && (
+    <figure class="sys" aria-label={`System diagram: ${d.title}`}>
+      <p class="t-label graphite">Diagram · {d.title}</p>
+      {d.lanes.map((lane) => (
+        <div class="sys__lane">
+          {lane.label && <p class="sys__label t-label">{lane.label}</p>}
+          <ol class="sys__flow">
+            {lane.nodes.map((n) => (
+              <li class:list={['sys__node', { 'is-flag': n.flag }]}>
+                <span class="t-label graphite">{n.k}</span>
+                <span class="sys__t">{n.t}</span>
+                {n.d && <span class="sys__d t-small graphite">{n.d}</span>}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+      <figcaption class="t-small graphite">Red outline: a step that can stop or hold back the system.</figcaption>
+    </figure>
+  )
+}
+
+<style>
+  .sys {
+    margin-block: var(--space-6);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .sys__lane {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .sys__flow {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .sys__node {
+    position: relative;
+    border: var(--rule);
+    padding: var(--space-3);
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+    background: var(--paper);
+  }
+  .sys__node + .sys__node::before {
+    content: '→';
+    position: absolute;
+    left: -22px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+  }
+  .sys__node.is-flag {
+    border: 2px solid var(--signal);
+    padding: calc(var(--space-3) - 1px);
+  }
+  .sys__t {
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .sys__d {
+    line-height: 1.4;
+  }
+  @media (max-width: 767px) {
+    .sys__flow {
+      grid-auto-flow: row;
+      gap: 24px;
+    }
+    .sys__node + .sys__node::before {
+      content: '↓';
+      left: 50%;
+      top: -20px;
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+interface Item {
+  label: string;
+  value?: string | null;
+  links?: { label: string; url: string }[];
+}
+interface Props {
+  items: Item[];
+}
+const items = Astro.props.items.filter((i) => (i.value && i.value.length) || (i.links && i.links.length));
+const fmt = (v: string) => {
+  const m = v.match(/^(.*?)\s*(\[[^\]]+\])\s*$/);
+  return m ? { text: m[1], pending: m[2] } : { text: v, pending: null };
+};
+---
+
+<dl class="meta">
+  {
+    items.map((i) => (
+      <div class="meta__item">
+        <dt class="t-label graphite">{i.label}</dt>
+        <dd class="t-label">
+          {i.value &&
+            (() => {
+              const f = fmt(i.value);
+              return (
+                <>
+                  {f.text}
+                  {f.pending && (
+                    <>
+                      {' '}
+                      <span class="pending">{f.pending}</span>
+                    </>
+                  )}
+                </>
+              );
+            })()}
+          {i.links && (
+            <span class="meta__links">
+              {i.links.map((l) => (
+                <a class="link-u" href={l.url} rel="noopener">
+                  {l.label} ↗
+                </a>
+              ))}
+            </span>
+          )}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    border-top: var(--rule);
+    border-bottom: var(--rule);
+  }
+  .meta__item {
+    padding: var(--space-4) var(--space-3);
+    border-left: var(--rule-soft);
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    min-width: 0;
+  }
+  .meta__item:nth-child(6n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .meta dd {
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+  .meta__links {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .meta__links a {
+    display: inline-block;
+    padding-block: 4px;
+    min-height: 24px;
+  }
+  @media (max-width: 1199px) {
+    .meta {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .meta__item:nth-child(6n + 1) {
+      border-left: var(--rule-soft);
+      padding-left: var(--space-3);
+    }
+    .meta__item:nth-child(3n + 1) {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    .meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .meta__item:nth-child(3n + 1) {
+      border-left: var(--rule-soft);
+      padding-left: var(--space-3);
+    }
+    .meta__item:nth-child(2n + 1) {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+</style>

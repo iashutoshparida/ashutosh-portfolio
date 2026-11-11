@@ -1,0 +1,56 @@
+---
+import { href, type ProjectEntry } from '../../lib/data';
+interface Props {
+  prev: ProjectEntry | null;
+  next: ProjectEntry | null;
+}
+const { prev, next } = Astro.props;
+---
+
+<nav class="pn" aria-label="More reports">
+  {
+    prev ? (
+      <a class="pn__link" href={href(`/work/${prev.data.slug}/`)}>
+        <span class="t-label graphite">← Report {prev.data.number}</span>
+        <span class="t-h3">{prev.data.title}</span>
+      </a>
+    ) : (
+      <span />
+    )
+  }
+  {
+    next ? (
+      <a class="pn__link pn__link--next" href={href(`/work/${next.data.slug}/`)}>
+        <span class="t-label graphite">Report {next.data.number} →</span>
+        <span class="t-h3">{next.data.title}</span>
+      </a>
+    ) : (
+      <a class="pn__link pn__link--next" href={href('/work/')}>
+        <span class="t-label graphite">Index →</span>
+        <span class="t-h3">All work</span>
+      </a>
+    )
+  }
+</nav>
+
+<style>
+  .pn {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: var(--rule);
+    border-bottom: var(--rule);
+  }
+  .pn__link {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-6) 0;
+    min-height: 44px;
+  }
+  .pn__link--next {
+    text-align: right;
+    border-left: var(--rule-soft);
+  }
+  .pn__link:hover .t-h3 {
+    color: var(--signal);
+  }
+</style>

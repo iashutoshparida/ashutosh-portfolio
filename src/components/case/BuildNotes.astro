@@ -1,0 +1,83 @@
+---
+interface Props {
+  buildNote: string;
+  repos: { label: string; url: string }[];
+  documents?: { label: string; url: string }[];
+  citations?: { text: string; url: string }[];
+}
+const { buildNote, repos, documents = [], citations = [] } = Astro.props;
+---
+
+<dl class="notes">
+  <div><dt class="t-label graphite">How it was built</dt><dd>{buildNote}</dd></div>
+  {
+    repos.length > 0 && (
+      <div>
+        <dt class="t-label graphite">Code</dt>
+        <dd class="notes__links">
+          {repos.map((r) => (
+            <a class="link-u t-data" href={r.url} rel="noopener">
+              github.com/{r.url.replace('https://github.com/', '')} ↗
+            </a>
+          ))}
+        </dd>
+      </div>
+    )
+  }
+  {
+    documents.length > 0 && (
+      <div>
+        <dt class="t-label graphite">Documents</dt>
+        <dd class="notes__links">
+          {documents.map((d) => (
+            <a class="link-u" href={d.url} rel="noopener">
+              {d.label} ↗
+            </a>
+          ))}
+        </dd>
+      </div>
+    )
+  }
+  {
+    citations.length > 0 && (
+      <div>
+        <dt class="t-label graphite">Data citation</dt>
+        <dd class="notes__links">
+          {citations.map((c) => (
+            <span class="t-small">
+              {c.text}{' '}
+              <a class="link-u" href={c.url} rel="noopener">
+                {c.url.replace('https://', '')} ↗
+              </a>
+            </span>
+          ))}
+        </dd>
+      </div>
+    )
+  }
+</dl>
+
+<style>
+  .notes {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .notes > div {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: var(--rule-soft);
+  }
+  .notes__links {
+    display: grid;
+    gap: var(--space-2);
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 767px) {
+    .notes > div {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

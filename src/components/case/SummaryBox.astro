@@ -1,0 +1,60 @@
+---
+import EvidenceStamp from '../EvidenceStamp.astro';
+import type { EvidenceId } from '../../lib/schemas';
+interface Props {
+  summary: { question: string; approach: string; outcome: string };
+  evidence: EvidenceId | null;
+}
+const { summary, evidence } = Astro.props;
+const cells = [
+  { k: 'Question', v: summary.question },
+  { k: 'Approach', v: summary.approach },
+  { k: 'Outcome', v: summary.outcome },
+];
+---
+
+<section class="summary" aria-label="Summary">
+  {
+    cells.map((c, i) => (
+      <div class="summary__cell">
+        <h2 class="t-label graphite">{c.k}</h2>
+        <p data-claim={c.k === 'Outcome' ? '' : undefined}>{c.v}</p>
+        {i === 2 && evidence && (
+          <p class="summary__stamp">
+            <EvidenceStamp evidenceId={evidence} />
+          </p>
+        )}
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: var(--rule);
+    margin-block: var(--space-7);
+  }
+  .summary__cell {
+    padding: var(--space-5);
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+  .summary__cell + .summary__cell {
+    border-left: var(--rule);
+  }
+  .summary__stamp {
+    margin-top: var(--space-2);
+  }
+  @media (max-width: 767px) {
+    .summary {
+      grid-template-columns: 1fr;
+    }
+    .summary__cell + .summary__cell {
+      border-left: 0;
+      border-top: var(--rule);
+    }
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+// Digital Mirror §Concept: four static journey frames (v1). Text comes from the project file only; no numbers.
+const frames = [
+  { k: '01 · Notice', screen: 'Late at night, switching between apps quickly', tone: 'plain' },
+  { k: '02 · Ask', screen: 'Winding down?', options: ['Grayscale', 'Breathe', 'Not now'], tone: 'ask' },
+  { k: '03 · Off-ramp', screen: 'Grayscale on. Nothing is locked.', tone: 'gray' },
+  { k: '04 · Limits', screen: 'One prompt a day. Everything stays on this phone.', tone: 'plain' },
+];
+---
+
+<figure class="mirror">
+  <ol class="mirror__frames">
+    {
+      frames.map((f) => (
+        <li class="mirror__frame">
+          <span class="t-label graphite">{f.k}</span>
+          <div class:list={['mirror__phone', `is-${f.tone}`]} aria-hidden="true">
+            <span class="mirror__notch" />
+            <span class="mirror__screen">
+              <span class="mirror__text">{f.screen}</span>
+              {f.options && (
+                <span class="mirror__opts">
+                  {f.options.map((o) => (
+                    <span class="mirror__opt">{o}</span>
+                  ))}
+                </span>
+              )}
+            </span>
+          </div>
+          <span class="visually-hidden">
+            {f.screen}
+            {f.options ? ` Options: ${f.options.join(', ')}.` : ''}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+  <figcaption class="t-small graphite">Concept frames. Not built or tested with users.</figcaption>
+</figure>
+
+<style>
+  .mirror {
+    margin-block: var(--space-6);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .mirror__frames {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 200px));
+    gap: var(--space-5);
+  }
+  .mirror__frame {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .mirror__phone {
+    position: relative;
+    aspect-ratio: 9 / 17;
+    border: 2px solid var(--ink);
+    border-radius: 18px;
+    padding: 22px 10px 14px;
+    display: grid;
+    background: var(--paper);
+  }
+  .mirror__notch {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 36px;
+    height: 5px;
+    background: var(--ink);
+    transform: translateX(-50%);
+  }
+  .mirror__screen {
+    display: grid;
+    align-content: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--paper-deep);
+    text-align: center;
+  }
+  .mirror__text {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .is-ask .mirror__text {
+    font-weight: 800;
+    font-stretch: 75%;
+    font-size: 22px;
+    text-transform: uppercase;
+  }
+  .is-gray .mirror__screen {
+    background: var(--rule-faint);
+    color: var(--graphite);
+  }
+  .mirror__opts {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .mirror__opt {
+    border: var(--rule);
+    padding: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .mirror__opt:last-child {
+    border-style: dashed;
+    color: var(--graphite);
+  }
+  @media (max-width: 1199px) {
+    .mirror__frames {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 767px) {
+    .mirror__frames {
+      grid-template-columns: repeat(2, minmax(0, 200px));
+    }
+  }
+  @media (max-width: 480px) {
+    .mirror__frames {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+    .mirror__text {
+      font-size: 13px;
+    }
+    .is-ask .mirror__text {
+      font-size: 18px;
+    }
+  }
+</style>

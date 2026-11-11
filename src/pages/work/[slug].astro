@@ -1,0 +1,257 @@
+---
+// Flagship "report" and supporting "brief" templates (ANTIGRAVITY_MASTER_BRIEF §4).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseHeader from '../../components/case/CaseHeader.astro';
+import MetaGrid from '../../components/MetaGrid.astro';
+import SummaryBox from '../../components/case/SummaryBox.astro';
+import SectionRail from '../../components/SectionRail.astro';
+import ResultsTable from '../../components/ResultsTable.astro';
+import BuildNotes from '../../components/case/BuildNotes.astro';
+import PrevNext from '../../components/case/PrevNext.astro';
+import SystemDiagram from '../../components/case/SystemDiagram.astro';
+import MirrorFrames from '../../components/case/MirrorFrames.astro';
+import Figure from '../../components/case/Figure.astro';
+import LeakageToggle from '../../components/instruments/LeakageToggle.astro';
+import MutationStrip from '../../components/instruments/MutationStrip.astro';
+import AgentTrace from '../../components/instruments/AgentTrace.astro';
+import { getProjects, splitSections, href, type ProjectEntry, type Section } from '../../lib/data';
+import { PRESSURE_MAT } from '../../lib/citations';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  const flagships = projects.filter((p) => p.data.tier === 'flagship');
+  return projects.map((project) => {
+    const i = flagships.indexOf(project);
+    return {
+      params: { slug: project.data.slug },
+      props: {
+        project,
+        prev: i > 0 ? flagships[i - 1] : null,
+        next: i >= 0 && i < flagships.length - 1 ? flagships[i + 1] : null,
+      },
+    };
+  });
+}
+
+interface Props {
+  project: ProjectEntry;
+  prev: ProjectEntry | null;
+  next: ProjectEntry | null;
+}
+const { project, prev, next } = Astro.props;
+const p = project.data;
+const html = project.rendered?.html ?? '';
+const isReport = p.tier === 'flagship';
+
+// Build sections: Markdown H2s, then a generated Results (before Misses) and Build notes (last).
+type CaseSection = Section & { kind: 'md' | 'results' | 'notes' };
+const { lead, sections: md } = splitSections(html);
+const sections: CaseSection[] = md.map((s) => ({ ...s, kind: 'md' as const }));
+if (isReport && p.metrics.length) {
+  const at = sections.findIndex((s) => s.title === 'Misses');
+  const results: CaseSection = { id: 'results', title: 'Results', html: '', kind: 'results' };
+  sections.splice(at === -1 ? sections.length : at, 0, results);
+}
+if (isReport) sections.push({ id: 'build-notes', title: 'Build notes', html: '', kind: 'notes' });
+
+const instrument = p.instrument?.release === 'v1' ? p.instrument.id : null;
+const metricById = (id: string) => {
+  const m = p.metrics.find((x) => x.id === id);
+  if (!m) throw new Error(`${p.slug}: metric ${id} missing for instrument`);
+  return m;
+};
+const firstSentence = (s: string) => (s.match(/^[^.]+\./)?.[0] ?? s).trim();
+
+const meta = [
+  { label: 'Role', value: p.role },
+  { label: 'Year', value: p.year ? String(p.year) : null },
+  { label: 'Team', value: p.team },
+  { label: 'Stack', value: p.stack.join(' · ') },
+  { label: 'Data', value: p.data_note },
+  { label: 'Build', value: firstSentence(p.build_note) },
+  { label: p.repos.length > 1 ? 'Repos' : 'Repo', links: p.repos.map((r) => ({ label: r.label, url: r.url })) },
+  { label: 'Documents', links: (p.documents ?? []).map((d) => ({ label: d.label, url: d.url })) },
+];
+const citations = p.slug === 'pressure-vit' ? PRESSURE_MAT : [];
+---
+
+<BaseLayout title={p.title} description={`${p.question} ${p.summary.outcome}`} current="work" og={p.slug}>
+  <div class="wrap">
+    <p class="crumb t-label"><a class="link-u" href={href('/work/')}>← Work</a></p>
+    <CaseHeader project={project} />
+    <MetaGrid items={meta} />
+    <SummaryBox summary={p.summary} evidence={p.primary_evidence} />
+
+    {
+      isReport ? (
+        <div class="case">
+          <div class="case__rail">
+            <SectionRail sections={sections} />
+          </div>
+          <div class="case__body">
+            {lead && <div class="prose" set:html={lead} />}
+            {sections.map((s, i) => (
+              <section class="case__sec" aria-labelledby={s.id}>
+                <h2 class="case__h2" id={s.id}>
+                  <span class="case__num t-label graphite">§{i + 1}</span>
+                  {s.title}
+                </h2>
+
+                {s.kind === 'md' && <div class="prose" set:html={s.html} />}
+
+                {s.kind === 'md' && s.title === 'System' && <SystemDiagram slug={p.slug} />}
+                {s.kind === 'md' && s.title === 'System' && p.slug === 'pressure-vit' && (
+                  <Figure
+                    src="pressure-vit/attention_rollout"
+                    width={903}
+                    height={1047}
+                    maxWidth={520}
+                    alt="Attention rollout for one held-out person, in three postures (supine, right, left). Top row: mean pressure maps showing the body outline. Bottom row: how much attention each image patch receives; the values are spread fairly evenly across patches."
+                    caption="Attention rollout for one held-out person. Top: mean pressure per posture. Bottom: attention per patch. It is spread fairly evenly, so treat it as a diagnostic, not as proof of what the model learned."
+                    evidenceId="public-data"
+                  />
+                )}
+                {s.kind === 'md' && s.title === 'Concept' && p.slug === 'digital-mirror' && <MirrorFrames />}
+
+                {s.kind === 'md' && s.title === 'Proof' && instrument === 'pressure-vit-leakage-toggle' && (
+                  <LeakageToggle metric={metricById('loso-accuracy')} />
+                )}
+                {s.kind === 'md' && s.title === 'Proof' && instrument === 'codepilot-mutation-strip' && (
+                  <MutationStrip metric={metricById('mutation-score')} />
+                )}
+                {s.kind === 'md' && s.title === 'Proof' && instrument === 'growthpilot-agent-trace' && (
+                  <AgentTrace metric={metricById('roas-lift')} />
+                )}
+
+                {s.kind === 'results' && <ResultsTable metrics={p.metrics} caption={`${p.title}: results and how each was measured`} />}
+
+                {s.kind === 'notes' && (
+                  <BuildNotes buildNote={p.build_note} repos={p.repos} documents={p.documents} citations={citations} />
+                )}
+              </section>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div class="brief">
+          {p.metrics.length > 0 && (
+            <section class="brief__sec" aria-labelledby="results">
+              <h2 class="case__h2" id="results">Results</h2>
+              <ResultsTable metrics={p.metrics} caption={`${p.title}: results and how each was measured`} />
+            </section>
+          )}
+          {p.slug === 'credit-risk' && (
+            <section class="brief__sec brief__figs" aria-label="Figures">
+              <Figure
+                src="credit-risk/calibration"
+                width={1275}
+                height={884}
+                alt="Calibration plot by predicted-risk decile. Observed default rates follow the perfect-calibration line at low predicted risk and sit above it in the two highest-risk deciles."
+                caption="Calibration by predicted-risk decile, on synthetic loans."
+                evidenceId="synthetic"
+              />
+              <Figure
+                src="credit-risk/stress_test"
+                width={1275}
+                height={884}
+                alt="Bar chart of portfolio mean predicted probability of default under three scenarios: baseline, mild and severe stress. It rises with each scenario and is almost twice as high under severe stress as at baseline."
+                caption="Borrower-level stress test, on synthetic loans. Illustrative of the method, not of a real portfolio."
+                evidenceId="synthetic"
+              />
+            </section>
+          )}
+          <section class="brief__sec" aria-label="Limits and links">
+            <div class="prose brief__misses" set:html={html} />
+            <BuildNotes buildNote={p.build_note} repos={p.repos} documents={p.documents} />
+          </section>
+        </div>
+      )
+    }
+
+    {isReport && <PrevNext prev={prev} next={next} />}
+    {
+      !isReport && (
+        <p class="brief__back">
+          <a class="btn" href={href('/work/')}>
+            ← All work
+          </a>
+        </p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .crumb {
+    padding-top: var(--space-6);
+  }
+  .case {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    padding-bottom: var(--space-8);
+  }
+  .case__rail {
+    grid-column: 1 / span 3;
+  }
+  .case__body {
+    grid-column: 4 / -1;
+    min-width: 0;
+  }
+  .case__sec {
+    padding-block: var(--space-7);
+    border-top: var(--rule);
+    scroll-margin-top: var(--space-6);
+  }
+  .case__sec:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .case__h2 {
+    font-family: var(--font-sans);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: clamp(28px, 3vw, 44px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-5);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    scroll-margin-top: var(--space-8);
+  }
+  .case__sec .prose {
+    max-width: var(--measure);
+  }
+  .brief {
+    display: grid;
+    gap: var(--space-7);
+    padding-bottom: var(--space-7);
+  }
+  .brief__figs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+  }
+  .brief__misses {
+    max-width: var(--measure);
+    margin-bottom: var(--space-6);
+  }
+  .brief__back {
+    padding-block: var(--space-6) var(--space-8);
+  }
+  @media (max-width: 1199px) {
+    .case {
+      display: block;
+    }
+    .case__h2 {
+      scroll-margin-top: 80px;
+    }
+  }
+  @media (max-width: 767px) {
+    .brief__figs {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
