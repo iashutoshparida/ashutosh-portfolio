@@ -81,7 +81,7 @@ const flagships = projects.filter((p) => p.data.tier === 'flagship');
         <div class="pindex__aside" aria-hidden="true">
           {flagships.map((p) => (
             <div class="preview" data-i={p.data.slug}>
-              <Preview slug={p.data.slug} />
+              <Preview slug={p.data.slug} number={p.data.number} />
               <span class="t-label">{p.data.title}</span>
             </div>
           ))}

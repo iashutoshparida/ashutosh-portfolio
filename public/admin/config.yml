@@ -1,0 +1,334 @@
+# Editor for the portfolio (Sveltia CMS). Every save is a commit to `main`; GitHub Actions then checks the
+# content and republishes the site in about two minutes. If a check fails, the live site keeps the last good
+# version: see the repo's Actions tab for the reason.
+backend:
+  name: github
+  repo: iashutoshparida/ashutosh-portfolio
+  branch: main
+  commit_messages:
+    create: 'Add {{collection}} “{{slug}}” (editor)'
+    update: 'Update {{collection}} “{{slug}}” (editor)'
+    delete: 'Delete {{collection}} “{{slug}}” (editor)'
+    uploadMedia: 'Upload “{{path}}” (editor)'
+    deleteMedia: 'Delete “{{path}}” (editor)'
+
+site_url: https://iashutoshparida.github.io/ashutosh-portfolio/
+display_url: https://iashutoshparida.github.io/ashutosh-portfolio/
+media_folder: public/files
+public_folder: /files
+
+# Reused option lists
+_evidence: &evidence
+  - { label: 'VERIFIED: reproduced from code or data in the repo', value: verified }
+  - { label: 'SIMULATION: measured in a simulated environment', value: simulation }
+  - { label: 'SEEDED BENCHMARK: on a sample/scenario set I wrote', value: seeded-benchmark }
+  - { label: 'PUBLIC DATA: on a real public dataset', value: public-data }
+  - { label: 'SYNTHETIC: on generated data', value: synthetic }
+  - { label: 'TEAM: team work (name the team)', value: team }
+  - { label: 'COURSE RESEARCH: supervised university project', value: course-research }
+  - { label: 'PRIMARY RESEARCH: collected by me (e.g. a survey)', value: primary-research }
+  - { label: 'SELF-REPORTED: stated by me, no public code or data yet', value: self-reported }
+_link_fields: &link_fields
+  - { name: label, label: Label, widget: string }
+  - { name: url, label: URL, widget: string, hint: 'Full address starting with https://' }
+_metric_fields: &metric_fields
+  - { name: id, label: Short id, widget: string, pattern: ['^[a-z0-9-]+$', 'lowercase letters, numbers and dashes'], hint: 'e.g. test-accuracy' }
+  - { name: label, label: What was measured, widget: string }
+  - { name: value, label: Value, widget: string, hint: 'Exactly as it should appear, e.g. "90.7%" or "7.8% → 87.8%"' }
+  - { name: detail, label: Detail, widget: string, required: false, hint: 'Optional second line, e.g. a confidence interval' }
+  - { name: evidence, label: Evidence label, widget: select, options: *evidence }
+  - { name: method, label: How it was measured, widget: text, hint: 'One or two sentences. Shown when someone clicks the label.' }
+  - { name: source, label: Source link, widget: string, required: false, hint: 'Optional https:// link where it can be checked' }
+_instrument_fields: &instrument_fields
+  - { name: id, label: Figure id, widget: string }
+  - { name: data, label: Data file, widget: string, required: false }
+  - { name: release, label: Release, widget: select, options: [v1, v1.1] }
+  - { name: caption, label: Caption, widget: string, required: false }
+
+collections:
+  # ------------------------------------------------------------------ Projects
+  - name: projects
+    label: Projects
+    label_singular: Project
+    description: >-
+      Case studies on /work. "Full report" projects get the long numbered page; "Short brief" projects get one
+      screen. Every number goes in Results with an evidence label.
+    folder: src/content/projects
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: '{{fields.slug}}'
+    identifier_field: title
+    summary: '{{title}} · {{tier}}'
+    sortable_fields: [title, number, year]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: slug
+        label: Page address
+        widget: string
+        pattern: ['^[a-z0-9-]+$', 'lowercase letters, numbers and dashes only']
+        hint: 'Becomes /work/<this>/. Set it once; changing it later breaks shared links.'
+      - name: tier
+        label: Type
+        widget: select
+        default: supporting
+        options:
+          - { label: 'Full report (flagship, shown on the homepage)', value: flagship }
+          - { label: 'Short brief', value: supporting }
+      - name: number
+        label: Report number
+        widget: string
+        required: false
+        pattern: ['^\d\d$', 'two digits, e.g. 05']
+        hint: 'Full reports only: "01", "02"… with no gaps. Leave empty for a short brief.'
+      - { name: subtitle, label: Subtitle, widget: string, required: false }
+      - { name: question, label: Headline question, widget: string, hint: 'One line, e.g. "Would your tests notice if I broke this?"' }
+      - name: lenses
+        label: Lenses
+        widget: select
+        multiple: true
+        min: 1
+        options:
+          - { label: Engineering, value: engineering }
+          - { label: Product, value: product }
+          - { label: Research, value: research }
+          - { label: Growth, value: growth }
+      - { name: year, label: Year, widget: number, value_type: int, required: false }
+      - { name: role, label: My role, widget: string }
+      - { name: team, label: Team, widget: string, required: false, hint: 'Name your teammates when it was team work' }
+      - { name: stack, label: Tools / stack, widget: list, field: { name: item, label: Tool, widget: string } }
+      - { name: data_note, label: Data, widget: text, hint: 'What data it used, and whether it is real, public, synthetic or simulated' }
+      - { name: primary_evidence, label: Main evidence label, widget: select, required: false, options: *evidence }
+      - { name: repos, label: Code repositories, widget: list, required: false, fields: *link_fields }
+      - { name: documents, label: 'Documents (PDFs, decks)', widget: list, required: false, fields: *link_fields }
+      - name: summary
+        label: Summary box
+        widget: object
+        fields:
+          - { name: question, label: Question, widget: text }
+          - { name: approach, label: Approach, widget: text }
+          - { name: outcome, label: Outcome, widget: text, hint: 'Any number here must also appear in Results below' }
+      - { name: metrics, label: Results, widget: list, required: false, fields: *metric_fields, summary: '{{fields.label}}: {{fields.value}}' }
+      - name: figures
+        label: Images
+        widget: list
+        required: false
+        fields:
+          - { name: src, label: Image, widget: image }
+          - { name: alt, label: Description for screen readers, widget: string }
+          - { name: caption, label: Caption, widget: string, required: false }
+          - { name: evidence, label: Evidence label, widget: select, required: false, options: *evidence }
+      - { name: build_note, label: How it was built, widget: text, hint: 'Required. Say if AI coding tools were used.' }
+      - name: body
+        label: Write-up
+        widget: markdown
+        required: false
+        hint: >-
+          Full reports: use "## Question", "## Stakes", "## System", "## Proof", "## Misses", "## Next" headings;
+          each becomes a numbered section. Short briefs: one paragraph starting "Misses:".
+      - name: instrument
+        label: Interactive figure (advanced, leave as is)
+        widget: object
+        required: false
+        collapsed: true
+        fields: *instrument_fields
+
+  # ------------------------------------------------------------------ Lab
+  - name: lab
+    label: Lab research
+    label_singular: Research entry
+    folder: src/content/lab
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: '{{fields.slug}}'
+    identifier_field: title
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: slug, label: Page address, widget: string, pattern: ['^[a-z0-9-]+$', 'lowercase letters, numbers and dashes only'], hint: 'Becomes /lab/<this>/' }
+      - { name: kind, label: Kind, widget: hidden, default: research }
+      - { name: question, label: Question, widget: string }
+      - { name: course, label: Course, widget: string }
+      - { name: supervisor, label: Supervisor, widget: string }
+      - { name: team, label: Team, widget: string, required: false }
+      - { name: evidence, label: Evidence label, widget: select, default: course-research, options: *evidence }
+      - { name: metrics, label: Results, widget: list, required: false, fields: *metric_fields, summary: '{{fields.label}}: {{fields.value}}' }
+      - { name: document, label: Report link, widget: object, required: false, fields: *link_fields }
+      - { name: documents, label: More report links, widget: list, required: false, fields: *link_fields }
+      - { name: body, label: Write-up, widget: markdown, required: false }
+      - { name: instrument, label: 'Interactive figure (advanced, leave as is)', widget: object, required: false, collapsed: true, fields: *instrument_fields }
+
+  # ------------------------------------------------------------------ Single files
+  - name: settings
+    label: Profile & pages
+    files:
+      - name: site
+        label: Profile, homepage & contact
+        file: src/content/site.yaml
+        format: yaml
+        fields:
+          - { name: name, label: Name, widget: string }
+          - { name: statement, label: 'Statement (3 lines)', widget: list, min: 3, max: 3, field: { name: line, label: Line, widget: string } }
+          - { name: descriptor, label: 'Descriptor (3 items)', widget: list, min: 3, max: 3, field: { name: item, label: Item, widget: string } }
+          - { name: institution_line, label: Institution line, widget: string }
+          - { name: now, label: '"Now" line at the top', widget: string }
+          - { name: intro, label: Introduction, widget: text }
+          - name: proof_strip
+            label: 'Homepage proof strip (3 numbers)'
+            widget: list
+            min: 3
+            max: 3
+            hint: 'Each picks a project (page address) and one of its Results (short id)'
+            fields:
+              - { name: project, label: Project page address, widget: string }
+              - { name: metric_id, label: Result short id, widget: string }
+          - name: nav
+            label: Menu (advanced)
+            widget: list
+            collapsed: true
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: number, label: Number, widget: string }
+              - { name: href, label: Path, widget: string }
+          - name: contact
+            label: Contact
+            widget: object
+            fields:
+              - { name: cta_heading, label: Heading, widget: string }
+              - name: email
+                label: Email
+                widget: object
+                fields:
+                  - { name: value, label: Address, widget: string }
+                  - { name: display, label: Shown as, widget: string }
+                  - { name: placeholder, label: Hide (show placeholder instead), widget: boolean, default: false }
+              - name: phone
+                label: Phone
+                widget: object
+                required: false
+                fields:
+                  - { name: value, label: Number for dialling (+91…), widget: string }
+                  - { name: display, label: Shown as, widget: string }
+                  - { name: placeholder, label: Hide, widget: boolean, default: false }
+              - name: linkedin
+                label: LinkedIn
+                widget: object
+                fields:
+                  - { name: value, label: Profile URL, widget: string }
+                  - { name: display, label: Shown as, widget: string }
+                  - { name: placeholder, label: Hide, widget: boolean, default: false }
+              - name: github
+                label: GitHub
+                widget: object
+                fields:
+                  - { name: value, label: Profile URL, widget: string }
+                  - { name: display, label: Shown as, widget: string }
+                  - { name: placeholder, label: Hide, widget: boolean, default: false }
+              - name: cv
+                label: CV
+                widget: object
+                hint: 'Upload your CV PDF, then untick "Hide"'
+                fields:
+                  - { name: value, label: CV file (PDF), widget: file, required: false }
+                  - { name: display, label: Shown as when hidden, widget: string }
+                  - { name: placeholder, label: Hide (show placeholder instead), widget: boolean, default: true }
+          - name: footer
+            label: Footer
+            widget: object
+            fields:
+              - { name: build_note, label: Build note, widget: string }
+              - { name: updated, label: Last updated (YYYY-MM), widget: string }
+
+      - name: about
+        label: About page
+        file: src/content/about.md
+        format: frontmatter
+        fields:
+          - { name: bio, label: Bio, widget: text }
+          - name: how_i_work
+            label: How I work (3 columns)
+            widget: list
+            min: 3
+            max: 3
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: text, label: Text, widget: text }
+          - name: experience
+            label: Experience
+            widget: list
+            summary: '{{fields.dates}} · {{fields.role}} · {{fields.org}}'
+            fields:
+              - { name: dates, label: Dates, widget: string, hint: 'e.g. "Jul 2026 —" or "May — Jul 2024"' }
+              - { name: role, label: Role, widget: string }
+              - { name: org, label: Organisation, widget: string }
+              - { name: pending, label: Title still pending, widget: boolean, required: false, default: false }
+              - { name: points, label: Bullet points, widget: list, required: false, field: { name: point, label: Point, widget: text } }
+              - { name: evidence, label: Evidence label for the bullets, widget: select, required: false, default: self-reported, options: *evidence }
+          - name: education
+            label: Education
+            widget: list
+            fields:
+              - { name: dates, label: Dates, widget: string }
+              - { name: degree, label: Degree, widget: string }
+              - { name: org, label: Institution, widget: string }
+          - name: programmes
+            label: Programmes & certificates
+            widget: list
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: org, label: From, widget: string }
+          - name: leadership
+            label: Leadership
+            widget: list
+            fields:
+              - { name: dates, label: Dates, widget: string, required: false }
+              - { name: role, label: Role, widget: string }
+              - { name: org, label: Organisation, widget: string }
+              - { name: note, label: Note, widget: string, required: false }
+          - name: achievements
+            label: Achievements
+            widget: list
+            required: false
+            fields:
+              - { name: text, label: Text, widget: string }
+              - { name: href, label: 'Link (optional, e.g. /work/hsic-wallet-share/)', widget: string, required: false }
+          - name: skills
+            label: Skills
+            widget: list
+            required: false
+            fields:
+              - { name: group, label: Group, widget: string }
+              - { name: items, label: Skills, widget: string }
+          - { name: off_the_clock, label: Off the clock, widget: list, field: { name: item, label: Item, widget: string } }
+
+      - name: experiments
+        label: Lab · Experiments
+        file: src/content/lab/experiments.yaml
+        format: yaml
+        fields:
+          - name: items
+            label: Experiments
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { name: slug, label: Short id, widget: string, pattern: ['^[a-z0-9-]+$', 'lowercase letters, numbers and dashes'] }
+              - { name: title, label: Title, widget: string }
+              - { name: line, label: One line, widget: string }
+              - { name: note, label: Caveat, widget: string, required: false }
+              - { name: evidence, label: Evidence label, widget: select, required: false, options: *evidence }
+              - { name: repo, label: Repository URL, widget: string }
+
+      - name: writing
+        label: Lab · Writing
+        file: src/content/lab/writing.yaml
+        format: yaml
+        fields:
+          - name: items
+            label: Writing
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: url, label: Link, widget: string }

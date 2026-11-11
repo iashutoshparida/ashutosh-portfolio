@@ -16,6 +16,8 @@ import MutationStrip from '../../components/instruments/MutationStrip.astro';
 import AgentTrace from '../../components/instruments/AgentTrace.astro';
 import { getProjects, splitSections, href, type ProjectEntry, type Section } from '../../lib/data';
 import { PRESSURE_MAT } from '../../lib/citations';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -44,9 +46,14 @@ const html = project.rendered?.html ?? '';
 const isReport = p.tier === 'flagship';
 
 // Build sections: Markdown H2s, then a generated Results (before Misses) and Build notes (last).
-type CaseSection = Section & { kind: 'md' | 'results' | 'notes' };
+type CaseSection = Section & { kind: 'md' | 'results' | 'notes' | 'figures' };
 const { lead, sections: md } = splitSections(html);
 const sections: CaseSection[] = md.map((s) => ({ ...s, kind: 'md' as const }));
+const figures = p.figures ?? [];
+if (isReport && figures.length) {
+  const at = sections.findIndex((s) => s.title === 'Misses');
+  sections.splice(at === -1 ? sections.length : at, 0, { id: 'figures', title: 'Figures', html: '', kind: 'figures' });
+}
 if (isReport && p.metrics.length) {
   const at = sections.findIndex((s) => s.title === 'Misses');
   const results: CaseSection = { id: 'results', title: 'Results', html: '', kind: 'results' };
@@ -73,14 +80,16 @@ const meta = [
   { label: 'Documents', links: (p.documents ?? []).map((d) => ({ label: d.label, url: d.url })) },
 ];
 const citations = p.slug === 'pressure-vit' ? PRESSURE_MAT : [];
+// Projects added from the editor have no generated share image until tools/make-assets.py is re-run.
+const og = existsSync(join(process.cwd(), 'public/og', `${p.slug}.png`)) ? p.slug : 'default';
 ---
 
-<BaseLayout title={p.title} description={`${p.question} ${p.summary.outcome}`} current="work" og={p.slug}>
+<BaseLayout title={p.title} description={`${p.question} ${p.summary.outcome}`} current="work" og={og}>
   <div class="wrap">
     <p class="crumb t-label"><a class="link-u" href={href('/work/')}>← Work</a></p>
     <CaseHeader project={project} />
     <MetaGrid items={meta} />
-    <SummaryBox summary={p.summary} evidence={p.primary_evidence} />
+    <SummaryBox summary={p.summary} evidence={p.primary_evidence ?? null} />
 
     {
       isReport ? (
@@ -123,10 +132,13 @@ const citations = p.slug === 'pressure-vit' ? PRESSURE_MAT : [];
                   <AgentTrace metric={metricById('roas-lift')} />
                 )}
 
+                {s.kind === 'figures' &&
+                  figures.map((f) => <Figure file={f.src} alt={f.alt} caption={f.caption ?? ''} evidenceId={f.evidence ?? undefined} />)}
+
                 {s.kind === 'results' && <ResultsTable metrics={p.metrics} caption={`${p.title}: results and how each was measured`} />}
 
                 {s.kind === 'notes' && (
-                  <BuildNotes buildNote={p.build_note} repos={p.repos} documents={p.documents} citations={citations} />
+                  <BuildNotes buildNote={p.build_note} repos={p.repos} documents={p.documents ?? []} citations={citations} />
                 )}
               </section>
             ))}
@@ -138,6 +150,13 @@ const citations = p.slug === 'pressure-vit' ? PRESSURE_MAT : [];
             <section class="brief__sec" aria-labelledby="results">
               <h2 class="case__h2" id="results">Results</h2>
               <ResultsTable metrics={p.metrics} caption={`${p.title}: results and how each was measured`} />
+            </section>
+          )}
+          {figures.length > 0 && (
+            <section class="brief__sec brief__figs" aria-label="Figures">
+              {figures.map((f) => (
+                <Figure file={f.src} alt={f.alt} caption={f.caption ?? ''} evidenceId={f.evidence ?? undefined} />
+              ))}
             </section>
           )}
           {p.slug === 'credit-risk' && (
@@ -162,7 +181,7 @@ const citations = p.slug === 'pressure-vit' ? PRESSURE_MAT : [];
           )}
           <section class="brief__sec" aria-label="Limits and links">
             <div class="prose brief__misses" set:html={html} />
-            <BuildNotes buildNote={p.build_note} repos={p.repos} documents={p.documents} />
+            <BuildNotes buildNote={p.build_note} repos={p.repos} documents={p.documents ?? []} />
           </section>
         </div>
       )

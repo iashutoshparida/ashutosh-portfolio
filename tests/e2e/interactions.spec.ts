@@ -45,7 +45,9 @@ test.describe('I-2 lens filter', () => {
   test('2.1–2.3 filter, live region, hash', async ({ page }) => {
     await page.goto('/work/');
     const rows = page.locator('li[data-lenses]');
-    await expect(rows).toHaveCount(9);
+    const total = await rows.count();
+    expect(total).toBeGreaterThan(0);
+    await expect(page.locator('[data-lens="all"]')).toContainText(String(total));
     await expect(page.locator('[data-lens="all"]')).toHaveAttribute('aria-pressed', 'true');
     await page.locator('[data-lens="product"]').click();
     await expect(page).toHaveURL(/#product$/);
@@ -59,7 +61,10 @@ test.describe('I-2 lens filter', () => {
 
   test('2.6 all-work link is computed', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('link', { name: 'All work (9) →' })).toBeVisible();
+    await page.goto('/work/');
+    const total = await page.locator('li[data-lenses]').count();
+    await page.goto('/');
+    await expect(page.getByRole('link', { name: `All work (${total}) →` })).toBeVisible();
   });
 });
 

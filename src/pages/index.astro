@@ -5,7 +5,7 @@ import ProjectIndex from '../components/ProjectIndex.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ExperienceList from '../components/ExperienceList.astro';
 import ContactBlock from '../components/ContactBlock.astro';
-import { site, about, getProjects, getFlagships, getLab, getMetric, href } from '../lib/data';
+import { site, about, getProjects, getFlagships, getLab, getMetric, href, asset } from '../lib/data';
 
 const projects = await getProjects();
 const flagships = await getFlagships();
@@ -34,7 +34,7 @@ const c = site.contact;
           <li class="t-label graphite">{site.institution_line}</li>
         </ul>
         <div class="hero__buttons">
-          {c.cv.placeholder ? <span class="btn btn--placeholder">{c.cv.display}</span> : <a class="btn btn--solid" href={c.cv.value}>CV ↓</a>}
+          {c.cv.placeholder ? <span class="btn btn--placeholder">{c.cv.display}</span> : <a class="btn btn--solid" href={asset(c.cv.value)}>CV ↓</a>}
           <a class="btn" href={c.github.value} rel="noopener">GitHub ↗</a>
         </div>
       </div>

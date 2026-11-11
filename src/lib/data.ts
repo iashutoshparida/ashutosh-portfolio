@@ -10,9 +10,9 @@ import writingRaw from '../content/lab/writing.yaml?raw';
 import {
   About,
   EvidenceEntry,
-  Experiment,
+  ExperimentsFile,
   Site,
-  Writing,
+  WritingFile,
   type EvidenceId,
   type Lens,
   type Metric,
@@ -27,8 +27,8 @@ function frontmatter(text: string): unknown {
 export const site = Site.parse(parseYaml(siteRaw));
 export const evidence = EvidenceEntry.array().parse(parseYaml(evidenceRaw));
 export const about = About.parse(frontmatter(aboutRaw));
-export const experiments = Experiment.array().parse(parseYaml(experimentsRaw));
-export const writing = Writing.array().parse(parseYaml(writingRaw));
+export const experiments = ExperimentsFile.parse(parseYaml(experimentsRaw)).items;
+export const writing = WritingFile.parse(parseYaml(writingRaw)).items;
 
 export const evidenceById = new Map<EvidenceId, (typeof evidence)[number]>(evidence.map((e) => [e.id, e]));
 export const evidenceLabel = (id: EvidenceId) => {
@@ -81,7 +81,7 @@ export const lensLabel = (id: Lens) => LENSES.find((l) => l.id === id)!.label;
 export function indexResult(p: ProjectEntry): { value: string; evidence: EvidenceId | null; metric: Metric | null } {
   const m = p.data.metrics[0];
   if (m) return { value: m.value, evidence: m.evidence, metric: m };
-  return { value: 'Strategy case', evidence: p.data.primary_evidence, metric: null };
+  return { value: 'Strategy case', evidence: p.data.primary_evidence ?? null, metric: null };
 }
 
 export async function getMetric(projectSlug: string, metricId: string) {
@@ -113,3 +113,5 @@ export function splitSections(html: string): { lead: string; sections: Section[]
 
 export const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 export const href = (path: string) => `${base}${path}`;
+/** Site-relative paths stored by the editor (e.g. /files/cv.pdf) get the base path; full URLs pass through. */
+export const asset = (v: string) => (v.startsWith('/') ? href(v) : v);

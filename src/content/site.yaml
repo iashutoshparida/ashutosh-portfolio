@@ -28,7 +28,7 @@ contact:
   email: { value: "ashutosh24082004@gmail.com", placeholder: false, display: "ashutosh24082004@gmail.com" }
   linkedin: { value: "https://www.linkedin.com/in/ashutoshparida23", placeholder: false, display: "LinkedIn" }
   github: { value: "https://github.com/iashutoshparida", placeholder: false, display: "GitHub" }
-  cv: { value: "PLACEHOLDER_CV_PDF", placeholder: true, display: "CV [placeholder]" }
+  cv: { value: "", placeholder: true, display: "CV [placeholder]" }
   phone: { value: "+918457822783", placeholder: false, display: "+91 84578 22783" }
 footer:
   build_note: "Built with AI coding agents. Architecture, evaluation design and decisions are mine."

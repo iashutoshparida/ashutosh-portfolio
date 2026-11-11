@@ -1,5 +1,5 @@
 ---
-import { site, href } from '../lib/data';
+import { site, href, asset } from '../lib/data';
 interface Props {
   current?: 'work' | 'lab' | 'about' | null;
 }
@@ -56,7 +56,7 @@ const c = site.contact;
       </ol>
       <div class="contents-sheet__contact">
         {c.email.placeholder ? <span class="btn btn--placeholder" aria-disabled="true">{c.email.display}</span> : <a class="btn" href={`mailto:${c.email.value}`}>Email ↗</a>}
-        {c.cv.placeholder ? <span class="btn btn--placeholder">{c.cv.display}</span> : <a class="btn" href={c.cv.value}>CV ↓</a>}
+        {c.cv.placeholder ? <span class="btn btn--placeholder">{c.cv.display}</span> : <a class="btn" href={asset(c.cv.value)}>CV ↓</a>}
         <a class="btn" href={c.github.value} rel="noopener">GitHub ↗</a>
       </div>
     </div>

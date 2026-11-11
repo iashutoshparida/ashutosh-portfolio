@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse } from 'yaml';
-import { About, EvidenceEntry, Experiment, LabEntry, Project, Site, Writing } from '../../src/lib/schemas';
+import { About, EvidenceEntry, ExperimentsFile, LabEntry, Project, Site, WritingFile } from '../../src/lib/schemas';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const C = join(ROOT, 'src/content');
@@ -21,8 +21,8 @@ const lab = readdirSync(join(C, 'lab'))
 const site = Site.parse(yml('site.yaml'));
 const evidence = EvidenceEntry.array().parse(yml('evidence.yaml'));
 const about = About.parse(fm(join(C, 'about.md')));
-const experiments = Experiment.array().parse(yml('lab/experiments.yaml'));
-Writing.array().parse(yml('lab/writing.yaml'));
+const experiments = ExperimentsFile.parse(yml('lab/experiments.yaml')).items;
+WritingFile.parse(yml('lab/writing.yaml'));
 
 const walk = (dir: string, ext: string): string[] =>
   readdirSync(dir).flatMap((f) => {
@@ -30,15 +30,24 @@ const walk = (dir: string, ext: string): string[] =>
     return statSync(p).isDirectory() ? walk(p, ext) : p.endsWith(ext) ? [p] : [];
   });
 const built = existsSync(DIST);
-const html = built ? walk(DIST, '.html').map((f) => ({ f, s: readFileSync(f, 'utf8') })) : [];
+// The editor at /admin/ is not part of the public site.
+const html = built
+  ? walk(DIST, '.html')
+      .filter((f) => !f.includes('/admin/'))
+      .map((f) => ({ f, s: readFileSync(f, 'utf8') }))
+  : [];
 const js = built ? walk(join(DIST, '_astro'), '.js').map((f) => ({ f, s: readFileSync(f, 'utf8') })) : [];
 const page = (route: string) => readFileSync(join(DIST, route, 'index.html'), 'utf8');
 const text = (s: string) => s.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 
 describe('schemas and cross-file rules', () => {
-  it('has 9 projects and 2 lab entries', () => {
-    expect(projects).toHaveLength(9);
-    expect(lab).toHaveLength(2);
+  it('every project file name matches its slug, and slugs are unique', () => {
+    const files = readdirSync(join(C, 'projects')).filter((f) => f.endsWith('.md'));
+    expect(projects.length).toBeGreaterThan(0);
+    files.forEach((f, i) => expect(projects[i].slug, f).toBe(f.replace(/\.md$/, '')));
+    expect(new Set(projects.map((p) => p.slug)).size).toBe(projects.length);
+    const labFiles = readdirSync(join(C, 'lab')).filter((f) => f.endsWith('.md'));
+    labFiles.forEach((f, i) => expect(lab[i].slug, f).toBe(f.replace(/\.md$/, '')));
   });
 
   it('rule 1: every evidence id exists; proof strip resolves', () => {
@@ -57,8 +66,8 @@ describe('schemas and cross-file rules', () => {
 
   it('rule 2: flagship numbers are 01–04, unique and contiguous; briefs have none', () => {
     const nums = projects.filter((p) => p.tier === 'flagship').map((p) => p.number).sort();
-    expect(nums).toEqual(['01', '02', '03', '04']);
-    for (const p of projects.filter((x) => x.tier === 'supporting')) expect(p.number).toBeUndefined();
+    expect(nums).toEqual(nums.map((_, i) => String(i + 1).padStart(2, '0')));
+    for (const p of projects.filter((x) => x.tier === 'supporting')) expect(p.number || null, p.slug).toBeNull();
   });
 
   it('instrument data matches the committed display values', () => {
@@ -213,7 +222,7 @@ describe.skipIf(!built)('rendered site (run after `npm run build`)', () => {
 
   it('no secrets or workbench folders in dist', () => {
     const files = walk(DIST, '');
-    expect(files.some((f) => /\.env|intelligence\/|strategy\/|handoff\/|OWNER_NOTES/.test(f))).toBe(false);
+    expect(files.some((f) => /\.env|intelligence\/|strategy\/|handoff\/|OWNER_NOTES/.test(f.replace(DIST, '')))).toBe(false);
     for (const { f, s } of [...html, ...js]) expect(/sk-[A-Za-z0-9]{20}|ghp_[A-Za-z0-9]{20}|AKIA[0-9A-Z]{16}/.test(s), f).toBe(false);
   });
 });

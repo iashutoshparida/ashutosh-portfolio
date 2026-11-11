@@ -1,11 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-const ROUTES = [
-  '/', '/work/', '/work/quality-tooling/', '/work/growth-agents/', '/work/pressure-vit/', '/work/digital-mirror/',
-  '/work/credit-risk/', '/work/hsic-wallet-share/', '/work/dark-store/', '/work/nobroker/', '/work/sha3-accelerator/',
-  '/lab/', '/lab/vqe/', '/lab/viscous-fingering/', '/about/', '/colophon/', '/404/',
-];
+import { readFileSync } from 'node:fs';
+
+// Every page in the built sitemap (so projects added from the editor are covered), plus the 404 page.
+const sitemap = readFileSync(new URL('../../dist/sitemap.xml', import.meta.url), 'utf8');
+const ROUTES = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname.replace(/^\/ashutosh-portfolio/, '') || '/');
+ROUTES.push('/404/');
 
 for (const route of ROUTES) {
   test(`axe: no serious or critical violations on ${route}`, async ({ page }) => {
@@ -36,7 +37,7 @@ test.describe('no JavaScript', () => {
     await page.goto('/work/growth-agents/');
     await expect(page.locator('.tr-violations li')).toHaveCount(4);
     await page.goto('/work/');
-    await expect(page.locator('li[data-lenses]')).toHaveCount(9);
+    expect(await page.locator('li[data-lenses]').count()).toBeGreaterThan(0);
   });
 });
 

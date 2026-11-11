@@ -12,11 +12,14 @@ interface Props {
   entry: LabCollectionEntry;
 }
 const l = Astro.props.entry.data;
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+const og = existsSync(join(process.cwd(), 'public/og', `lab-${l.slug}.png`)) ? `lab-${l.slug}` : 'default';
 const html = Astro.props.entry.rendered?.html ?? '';
 const docs = l.documents ?? (l.document ? [l.document] : []);
 ---
 
-<BaseLayout title={l.title} current="lab" og={`lab-${l.slug}`} description={l.question}>
+<BaseLayout title={l.title} current="lab" og={og} description={l.question}>
   <div class="wrap">
     <p class="crumb t-label"><a class="link-u" href={href('/lab/')}>← Lab</a></p>
     <header class="lab-head">

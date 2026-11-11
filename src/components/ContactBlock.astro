@@ -1,6 +1,6 @@
 ---
 // Contact (I-8.2/8.3). Placeholders render visibly and never become links (schema rule 4).
-import { site, href } from '../lib/data';
+import { site, href, asset } from '../lib/data';
 interface Props {
   size?: 'large' | 'compact';
 }
@@ -38,7 +38,7 @@ const c = site.contact;
     {c.phone && !c.phone.placeholder && <li><a class="t-label link-u" href={`tel:${c.phone.value}`}>{c.phone.display}</a></li>}
     <li><a class="t-label link-u" href={c.github.value} rel="noopener">GitHub ↗</a></li>
     <li>{c.linkedin.placeholder ? <span class="t-label graphite">{c.linkedin.display}</span> : <a class="t-label link-u" href={c.linkedin.value} rel="noopener">LinkedIn ↗</a>}</li>
-    <li>{c.cv.placeholder ? <span class="t-label graphite">{c.cv.display}</span> : <a class="t-label link-u" href={c.cv.value}>CV ↓</a>}</li>
+    <li>{c.cv.placeholder ? <span class="t-label graphite">{c.cv.display}</span> : <a class="t-label link-u" href={asset(c.cv.value)}>CV ↓</a>}</li>
     <li><a class="t-label link-u" href={href('/colophon/')}>Colophon</a></li>
   </ul>
 </section>

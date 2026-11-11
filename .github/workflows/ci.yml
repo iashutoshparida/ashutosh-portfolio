@@ -1,16 +1,19 @@
-name: CI
+name: Publish site
 
+# Every push to main (including saves from the editor at /admin/) is checked and, if the checks pass,
+# published to GitHub Pages. If a check fails, the live site keeps its last good version.
 on:
-  pull_request:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  test:
+  check-and-build:
+    name: Check content and build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,8 +23,48 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx astro check
+      - name: Build for GitHub Pages
+        run: npm run build
+        env:
+          SITE_URL: https://iashutoshparida.github.io
+          BASE_PATH: /ashutosh-portfolio
+      - name: Content rules (evidence labels, number audit, banned strings, credits)
+        run: npm test
+      - if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Publish to GitHub Pages
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: check-and-build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  browser-tests:
+    # Interaction, accessibility and no-JS checks. Reported, but they do not block publishing.
+    name: Browser tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
       - run: npm run build
-      - run: npm test
       - run: npx playwright install --with-deps chromium webkit firefox
       - run: npx playwright test
         env:
@@ -31,31 +74,3 @@ jobs:
         with:
           name: playwright-results
           path: test-results/
-
-  deploy:
-    # Publishes to GitHub Pages from main. Enable Pages (Source: GitHub Actions) in the repo settings first.
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: test
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-        env:
-          SITE_URL: https://iashutoshparida.github.io
-          BASE_PATH: /ashutosh-portfolio
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-      - id: deployment
-        uses: actions/deploy-pages@v4

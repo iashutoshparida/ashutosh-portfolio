@@ -1,25 +1,33 @@
 ---
 // Approved static figure: WebP with PNG fallback, explicit size, lazy below the fold.
 import EvidenceStamp from '../EvidenceStamp.astro';
-import { href } from '../../lib/data';
+import { href, asset } from '../../lib/data';
 import type { EvidenceId } from '../../lib/schemas';
 interface Props {
-  src: string; // path without extension, under /figures
-  width: number;
-  height: number;
+  src?: string; // approved figure: path without extension, under /figures (WebP + PNG)
+  file?: string; // editor upload: full path such as /files/chart.png
+
+  width?: number;
+  height?: number;
   alt: string;
   caption: string;
   maxWidth?: number;
   evidenceId?: EvidenceId;
 }
-const { src, width, height, alt, caption, evidenceId, maxWidth } = Astro.props;
+const { src, file, width, height, alt, caption, evidenceId, maxWidth } = Astro.props;
 ---
 
 <figure class="fig" style={maxWidth ? `max-width:${maxWidth}px` : undefined}>
-  <picture>
-    <source srcset={href(`/figures/${src}.webp`)} type="image/webp" />
-    <img src={href(`/figures/${src}.png`)} width={width} height={height} alt={alt} loading="lazy" decoding="async" />
-  </picture>
+  {
+    file ? (
+      <img src={asset(file)} alt={alt} loading="lazy" decoding="async" />
+    ) : (
+      <picture>
+        <source srcset={href(`/figures/${src}.webp`)} type="image/webp" />
+        <img src={href(`/figures/${src}.png`)} width={width} height={height} alt={alt} loading="lazy" decoding="async" />
+      </picture>
+    )
+  }
   <figcaption class="t-small graphite">
     {evidenceId && <EvidenceStamp evidenceId={evidenceId} />}
     {caption}

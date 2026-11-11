@@ -1,0 +1,12 @@
+import { chromium } from '@playwright/test';
+const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
+const p = await b.newPage({ viewport: { width: 1280, height: 800 } });
+const logs = [];
+p.on('console', (m) => logs.push(`${m.type()}: ${m.text()}`));
+p.on('pageerror', (e) => logs.push(`pageerror: ${e.message}`));
+await p.goto('http://localhost:4321/admin/');
+await p.waitForTimeout(6000);
+await p.screenshot({ path: 'shots/admin.png' });
+console.log((await p.locator('body').innerText()).slice(0, 600));
+console.log(logs.filter((l) => !l.includes('Download the')).slice(0, 15).join('\n'));
+await b.close();
