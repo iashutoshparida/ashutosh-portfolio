@@ -1,0 +1,336 @@
+/* Base: reset, typography, primitives. Radius 0, no shadows, 1px rules. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+/* Cross-document View Transitions (progressive; no JS router). */
+@view-transition {
+  navigation: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  font-variation-settings: 'wdth' 100;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+}
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+:where(a, button, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---------- Typography tokens as classes ---------- */
+.t-display {
+  font-family: var(--font-sans);
+  font-size: var(--fs-display);
+  font-variation-settings: 'wdth' 62;
+  font-stretch: 62%;
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.t-h1 {
+  font-size: var(--fs-h1);
+  font-variation-settings: 'wdth' 75;
+  font-stretch: 75%;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+.t-h2 {
+  font-size: var(--fs-h2);
+  font-variation-settings: 'wdth' 75;
+  font-stretch: 75%;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.t-h3 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.25;
+}
+.t-statement {
+  font-size: var(--fs-statement);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+.t-proof {
+  font-size: var(--fs-proof);
+  font-variation-settings: 'wdth' 75;
+  font-stretch: 75%;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.t-small {
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
+.t-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.t-data {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data);
+  font-weight: 400;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+.graphite {
+  color: var(--graphite);
+}
+
+/* ---------- Prose (Markdown bodies) ---------- */
+.prose {
+  max-width: var(--measure);
+}
+.prose > * + * {
+  margin-top: 1em;
+}
+.prose ul {
+  display: grid;
+  gap: 0.6em;
+}
+.prose li {
+  padding-left: 1.2em;
+  position: relative;
+}
+.prose li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--graphite);
+}
+.prose strong {
+  font-weight: 650;
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Primitives ---------- */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute;
+  left: var(--margin);
+  top: -100px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--space-3) var(--space-4);
+}
+.skip-link:focus {
+  top: var(--space-2);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: var(--rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) linear,
+    color var(--dur-fast) linear;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn--solid {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn--solid:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+.btn--placeholder,
+.btn--placeholder:hover {
+  border-style: dashed;
+  background: transparent;
+  color: var(--graphite);
+  cursor: default;
+}
+.btn[disabled] {
+  cursor: not-allowed;
+}
+
+/* Evidence stamp (I-1) */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  border: var(--rule);
+  padding: 3px 7px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-stamp);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: transparent;
+  color: var(--ink);
+  vertical-align: middle;
+}
+button.stamp {
+  cursor: pointer;
+  min-height: 24px;
+}
+button.stamp:hover,
+button.stamp[aria-expanded='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.stamp-wrap {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  width: min(340px, calc(100vw - 2 * var(--margin)));
+  background: var(--paper);
+  border: var(--rule);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: normal;
+  color: var(--ink);
+  text-align: left;
+}
+.popover[hidden] {
+  display: none;
+}
+.popover.flip-x {
+  left: auto;
+  right: 0;
+}
+.popover .pp {
+  display: block;
+}
+.popover .pp + .pp {
+  margin-top: var(--space-2);
+}
+.popover .def {
+  color: var(--graphite);
+}
+.popover a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pending {
+  display: inline-block;
+  border: 1px dashed var(--ink);
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-stamp);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.rule-top {
+  border-top: var(--rule);
+}
+.link-u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.link-u:hover {
+  color: var(--signal);
+}

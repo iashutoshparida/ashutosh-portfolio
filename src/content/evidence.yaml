@@ -1,0 +1,26 @@
+# Evidence stamp vocabulary. Stamps always render the full label (never abbreviated).
+# `definition` is shown in the legend and as the first line of every MethodPopover.
+- id: verified
+  label: VERIFIED
+  definition: Reproduced from the code or data in the linked repository.
+- id: simulation
+  label: SIMULATION
+  definition: Measured in a simulated environment built for the project. Not real users, money or traffic.
+- id: seeded-benchmark
+  label: SEEDED BENCHMARK
+  definition: Measured on a sample codebase or scenario set that I wrote to test the tool. Not a real-world codebase.
+- id: public-data
+  label: PUBLIC DATA
+  definition: Measured on a real, publicly available dataset.
+- id: synthetic
+  label: SYNTHETIC
+  definition: Measured on generated data. Figures are illustrative of the method, not of a real portfolio.
+- id: team
+  label: TEAM
+  definition: Team work. Team members are named on the project page.
+- id: course-research
+  label: COURSE RESEARCH
+  definition: Supervised university project report at BITS Pilani. Not a peer-reviewed publication.
+- id: primary-research
+  label: PRIMARY RESEARCH
+  definition: Collected by me directly (for example, a survey I ran).

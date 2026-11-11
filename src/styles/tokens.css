@@ -1,0 +1,120 @@
+/* Final tokens: handoff/ANTIGRAVITY_MASTER_BRIEF.md §5–§6. Do not change without a change request. */
+@font-face {
+  font-family: 'Archivo';
+  src: url('../assets/fonts/archivo-var-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('../assets/fonts/ibm-plex-mono-400-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('../assets/fonts/ibm-plex-mono-500-latin.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+/* Metric-matched fallbacks so the swap does not shift layout (CLS < 0.05). */
+@font-face {
+  font-family: 'Archivo Fallback';
+  src: local('Arial'), local('Helvetica'), local('Liberation Sans');
+  ascent-override: 87.8%;
+  descent-override: 21%;
+  line-gap-override: 0%;
+  size-adjust: 103%;
+}
+@font-face {
+  font-family: 'Plex Mono Fallback';
+  src: local('Courier New'), local('Liberation Mono'), local('DejaVu Sans Mono');
+  ascent-override: 102.5%;
+  descent-override: 27.5%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+:root {
+  --paper: #f3f1ec;
+  --paper-deep: #e8e5dd;
+  --ink: #111111;
+  --graphite: #5e5c57;
+  --signal: #c8361a;
+  --rule-faint: #d9d5cc;
+  --focus: #c8361a;
+
+  /* Plex Mono sits second in the sans stack: it supplies ↗ and other glyphs Archivo lacks. */
+  --font-sans: 'Archivo', 'IBM Plex Mono', 'Archivo Fallback', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Plex Mono Fallback', ui-monospace, monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  --rule: 1px solid var(--ink);
+  --rule-soft: 1px solid var(--rule-faint);
+  --radius: 0;
+  --measure: 66ch;
+  --max: 1440px;
+
+  --dur-fast: 150ms;
+  --dur-base: 240ms;
+  --dur-sheet: 180ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Type scale (§6) */
+  --fs-display: clamp(64px, 13vw, 206px);
+  --fs-h1: clamp(40px, 6vw, 96px);
+  --fs-h2: clamp(28px, 3.2vw, 56px);
+  --fs-h3: 22px;
+  --fs-statement: clamp(28px, 3.6vw, 54px);
+  --fs-proof: clamp(40px, 5vw, 60px);
+  --fs-body: 18px;
+  --fs-small: 15px;
+  --fs-label: 12px;
+  --fs-data: 14px;
+  --fs-stamp: 11px;
+
+  /* Grid (§7) */
+  --cols: 12;
+  --gutter: 24px;
+  --margin: 48px;
+  --section-pad: var(--space-9);
+}
+@media (max-width: 1199px) {
+  :root {
+    --cols: 8;
+    --gutter: 20px;
+    --margin: 32px;
+    --section-pad: var(--space-8);
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --cols: 4;
+    --gutter: 16px;
+    --margin: 20px;
+    --section-pad: var(--space-7);
+    --fs-body: 17px;
+    --fs-label: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-sheet: 0ms;
+  }
+}

@@ -1,0 +1,61 @@
+/* 12 / 8 / 4 column grid with named lanes (§7). */
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+.section {
+  padding-block: var(--section-pad);
+  border-top: var(--rule);
+}
+.section--flush {
+  border-top: 0;
+}
+/* Lanes (lg). Collapse on smaller screens. */
+.lane-margin {
+  grid-column: 1 / span 2;
+}
+.lane-text {
+  grid-column: 3 / span 6;
+}
+.lane-aside {
+  grid-column: 10 / span 3;
+}
+.lane-wide {
+  grid-column: 3 / -1;
+}
+.lane-full {
+  grid-column: 1 / -1;
+}
+@media (max-width: 1199px) {
+  .lane-margin {
+    grid-column: 1 / span 2;
+  }
+  .lane-text {
+    grid-column: 3 / -1;
+  }
+  .lane-aside {
+    grid-column: 3 / -1;
+    margin-top: var(--space-4);
+  }
+  .lane-wide {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 767px) {
+  .lane-margin,
+  .lane-text,
+  .lane-aside,
+  .lane-wide {
+    grid-column: 1 / -1;
+  }
+  .lane-margin {
+    margin-bottom: var(--space-4);
+  }
+}

@@ -1,0 +1,34 @@
+# Public site identity. Every value here is approved for publication.
+# Placeholders are marked PLACEHOLDER and must render visibly as placeholders until replaced.
+name: Ashutosh Parida
+statement:
+  - Builds AI systems.
+  - Tries to break them.
+  - Asks who they're for.
+descriptor: [AI Engineer, Product Builder, Creative Technologist]
+institution_line: "BITS Pilani '27"
+now: "AI/ML researcher, CIL Lab, BITS Pilani · Graduating 2027"
+intro: >-
+  I'm a final-year Physics and Electronics & Instrumentation student at BITS Pilani.
+  I build LLM and ML systems, and the evaluation harnesses that tell me whether they
+  actually work. My product training keeps asking the third question: who is this for?
+proof_strip:            # each item links to the named project's Results section
+  - project: quality-tooling
+    metric_id: mutation-score
+  - project: pressure-vit
+    metric_id: loso-accuracy
+  - project: growth-agents
+    metric_id: roas-lift
+nav:
+  - { label: Work, number: "01", href: /work }
+  - { label: Lab, number: "02", href: /lab }
+  - { label: About, number: "03", href: /about }
+contact:
+  cta_heading: Have a problem worth breaking?
+  email: { value: "PLACEHOLDER_EMAIL", placeholder: true, display: "[Email: placeholder]" }
+  linkedin: { value: "PLACEHOLDER_LINKEDIN_URL", placeholder: true, display: "LinkedIn [placeholder]" }
+  github: { value: "https://github.com/iashutoshparida", placeholder: false, display: "GitHub" }
+  cv: { value: "PLACEHOLDER_CV_PDF", placeholder: true, display: "CV [placeholder]" }
+footer:
+  build_note: "Built with AI coding agents. Architecture, evaluation design and decisions are mine."
+  updated: "2026-11"

@@ -1,0 +1,35 @@
+---
+import { site, href } from '../lib/data';
+import ContactBlock from './ContactBlock.astro';
+interface Props {
+  withContact?: boolean;
+}
+const { withContact = true } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    {withContact && <ContactBlock size="compact" />}
+    <div class="site-footer__meta t-label graphite">
+      <span>{site.footer.build_note}</span>
+      <span>
+        <a class="link-u" href={href('/colophon/#evidence')}>Evidence legend</a> · Updated {site.footer.updated}
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: var(--rule);
+    padding-block: var(--space-8) var(--space-6);
+  }
+  .site-footer__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-6);
+    margin-top: var(--space-7);
+    line-height: 1.6;
+  }
+</style>

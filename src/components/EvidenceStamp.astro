@@ -1,0 +1,47 @@
+---
+// I-1: full evidence label; a button that opens a method popover when a method is given.
+import { evidenceById } from '../lib/data';
+import type { EvidenceId } from '../lib/schemas';
+
+interface Props {
+  evidenceId: EvidenceId;
+  method?: string;
+  source?: string | null;
+}
+const { evidenceId, method, source } = Astro.props;
+const e = evidenceById.get(evidenceId);
+if (!e) throw new Error(`Unknown evidence id: ${evidenceId}`);
+const uid = `pop-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+{
+  method ? (
+    <span class="stamp-wrap">
+      <button
+        type="button"
+        class="stamp"
+        aria-expanded="false"
+        aria-controls={uid}
+        data-stamp
+        aria-label={`${e.label}: how this was measured`}
+      >
+        {e.label}
+      </button>
+      <span class="popover" id={uid} role="dialog" aria-label={`${e.label}: method`} hidden>
+        <span class="pp def">{e.definition}</span>
+        <span class="pp">{method}</span>
+        {source && (
+          <span class="pp">
+            <a href={source} rel="noopener" target="_blank">
+              Source ↗
+            </a>
+          </span>
+        )}
+      </span>
+    </span>
+  ) : (
+    <span class="stamp" title={e.definition}>
+      {e.label}
+    </span>
+  )
+}

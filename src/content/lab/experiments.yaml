@@ -1,0 +1,28 @@
+# Short entries. No headline metrics are shown for these.
+- slug: smb-outbound
+  title: SMB outbound sales engine
+  line: Lead scoring, LLM-drafted emails, A/B sample sizing and an n8n workflow.
+  evidence: synthetic
+  note: Run on a synthetic sample; any reply rates in the CLI are placeholders, not results.
+  repo: https://github.com/iashutoshparida/smb-outbound-sales-engine
+- slug: resume-screener
+  title: Multi-agent resume screener
+  line: A LangGraph pipeline of parsing, scoring and review agents.
+  evidence: null
+  note: Prototype; screening quality has not been measured.
+  repo: https://github.com/iashutoshparida/Multi-Agent-Resume-Screening-System
+- slug: cfpb
+  title: CFPB complaint analytics
+  line: What drives consumer-finance complaints, by issue and company.
+  evidence: public-data
+  repo: https://github.com/iashutoshparida/cfpb-complaint-analytics
+- slug: email-uplift
+  title: Email campaign uplift
+  line: Who an email actually changes behaviour for, using uplift modelling.
+  evidence: public-data
+  repo: https://github.com/iashutoshparida/email-campaign-uplift
+- slug: retention
+  title: Retention, win-back and loyalty
+  line: Cohort retention, dormant-buyer scoring and loyalty tiers for an online retailer.
+  evidence: public-data
+  repo: https://github.com/iashutoshparida/retention-winback-loyalty

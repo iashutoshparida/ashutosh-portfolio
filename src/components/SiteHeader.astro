@@ -1,0 +1,193 @@
+---
+import { site, href } from '../lib/data';
+interface Props {
+  current?: 'work' | 'lab' | 'about' | null;
+}
+const { current = null } = Astro.props;
+const keyOf = (h: string) => h.replace(/^\//, '').split('/')[0];
+const c = site.contact;
+---
+
+<header class="site-header">
+  <div class="wrap site-header__bar">
+    <a class="wordmark" href={href('/')}>{site.name.toUpperCase()}</a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        {
+          site.nav.map((n) => (
+            <li>
+              <a
+                class="t-label"
+                href={href(n.href)}
+                aria-current={current === keyOf(n.href) ? 'page' : undefined}
+              >
+                {n.number} {n.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn" href="#contact">Email ↗</a>
+    </nav>
+    <button class="btn contents-btn" type="button" aria-haspopup="dialog" aria-controls="contents-sheet" data-contents-open>
+      Contents
+    </button>
+  </div>
+
+  <div class="contents-sheet" id="contents-sheet" role="dialog" aria-modal="true" aria-labelledby="contents-title" hidden>
+    <div class="wrap contents-sheet__inner">
+      <div class="contents-sheet__top">
+        <h2 id="contents-title" class="t-label">Contents</h2>
+        <button class="btn" type="button" data-contents-close>Close</button>
+      </div>
+      <ol class="toc">
+        <li><a class="toc__row" href={href('/')}><span>Home</span><span class="toc__dots" aria-hidden="true"></span><span>00</span></a></li>
+        {
+          site.nav.map((n) => (
+            <li>
+              <a class="toc__row" href={href(n.href)} aria-current={current === keyOf(n.href) ? 'page' : undefined}>
+                <span>{n.label}</span>
+                <span class="toc__dots" aria-hidden="true" />
+                <span>{n.number}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="contents-sheet__contact">
+        <span class="btn btn--placeholder" aria-disabled="true">{c.email.placeholder ? c.email.display : 'Email'}</span>
+        {c.cv.placeholder ? <span class="btn btn--placeholder">{c.cv.display}</span> : <a class="btn" href={c.cv.value}>CV ↓</a>}
+        <a class="btn" href={c.github.value} rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: var(--rule);
+    background: var(--paper);
+  }
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    min-height: 72px;
+  }
+  .wordmark {
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+  }
+  .primary-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .primary-nav ul {
+    display: flex;
+    gap: var(--space-6);
+  }
+  .primary-nav ul a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    border-bottom: 2px solid transparent;
+  }
+  .primary-nav ul a:hover {
+    color: var(--signal);
+  }
+  .primary-nav ul a[aria-current='page'] {
+    border-bottom-color: var(--ink);
+  }
+  .contents-btn {
+    display: none;
+  }
+  @media (max-width: 1199px) {
+    .primary-nav,
+    .primary-nav ul {
+      gap: var(--space-5);
+    }
+  }
+  @media (max-width: 767px) {
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .site-header__bar {
+      min-height: 56px;
+    }
+    .primary-nav {
+      display: none;
+    }
+    .contents-btn {
+      display: inline-flex;
+    }
+  }
+  .contents-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: var(--paper);
+    overflow-y: auto;
+    transform: translateY(0);
+    transition: transform var(--dur-sheet) var(--ease);
+  }
+  .contents-sheet[hidden] {
+    display: none;
+  }
+  .contents-sheet.is-entering {
+    transform: translateY(-100%);
+  }
+  .contents-sheet__inner {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-block: var(--space-3) var(--space-7);
+  }
+  .contents-sheet__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 44px;
+    border-bottom: var(--rule);
+    padding-bottom: var(--space-3);
+  }
+  .toc {
+    display: grid;
+  }
+  .toc__row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding: var(--space-4) 0;
+    font-size: 28px;
+    font-weight: 800;
+    font-variation-settings: 'wdth' 75;
+    font-stretch: 75%;
+    text-transform: uppercase;
+    min-height: 44px;
+  }
+  .toc__row > span:last-child {
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: 500;
+  }
+  .toc__dots {
+    flex: 1;
+    border-bottom: 2px dotted var(--ink);
+    transform: translateY(-6px);
+  }
+  .toc__row[aria-current='page'] {
+    color: var(--signal);
+  }
+  .contents-sheet__contact {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    margin-top: auto;
+  }
+</style>

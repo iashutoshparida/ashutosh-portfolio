@@ -1,0 +1,98 @@
+---
+// Contact (I-8.2/8.3). Placeholders render visibly and never become links (schema rule 4).
+import { site, href } from '../lib/data';
+interface Props {
+  size?: 'large' | 'compact';
+}
+const { size = 'large' } = Astro.props;
+const c = site.contact;
+---
+
+<section id="contact" class:list={['contact', `contact--${size}`]} aria-labelledby="contact-heading">
+  <h2 id="contact-heading" class="t-label">{c.cta_heading}</h2>
+  {
+    c.email.placeholder ? (
+      <p class="contact__email contact__email--placeholder" data-placeholder>
+        {c.email.display}
+      </p>
+    ) : (
+      <a class="contact__email" href={`mailto:${c.email.value}`}>
+        {c.email.value} ↗
+      </a>
+    )
+  }
+  <div class="contact__actions">
+    <button
+      class="btn"
+      type="button"
+      data-copy={c.email.placeholder ? undefined : c.email.value}
+      disabled={c.email.placeholder}
+      aria-describedby={c.email.placeholder ? 'copy-note' : undefined}
+    >
+      Copy address
+    </button>
+    {c.email.placeholder && <span id="copy-note" class="t-label graphite">Address not published yet</span>}
+    <span class="visually-hidden" aria-live="polite" data-copy-status></span>
+  </div>
+  <ul class="contact__links">
+    <li><a class="t-label link-u" href={c.github.value} rel="noopener">GitHub ↗</a></li>
+    <li>{c.linkedin.placeholder ? <span class="t-label graphite">{c.linkedin.display}</span> : <a class="t-label link-u" href={c.linkedin.value} rel="noopener">LinkedIn ↗</a>}</li>
+    <li>{c.cv.placeholder ? <span class="t-label graphite">{c.cv.display}</span> : <a class="t-label link-u" href={c.cv.value}>CV ↓</a>}</li>
+    <li><a class="t-label link-u" href={href('/colophon/')}>Colophon</a></li>
+  </ul>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .contact__email {
+    display: block;
+    font-size: clamp(36px, 6vw, 104px);
+    font-variation-settings: 'wdth' 62;
+    font-stretch: 62%;
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .contact--compact .contact__email {
+    font-size: clamp(28px, 3.6vw, 54px);
+  }
+  .contact__email--placeholder {
+    color: var(--graphite);
+  }
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .contact__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-6);
+    border-top: var(--rule);
+    padding-top: var(--space-4);
+  }
+  .contact__links li {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  @media (max-width: 1199px) {
+    .contact__email {
+      font-size: clamp(32px, 7vw, 80px);
+    }
+  }
+  @media (max-width: 767px) {
+    .contact__email {
+      font-size: 9vw;
+    }
+    .contact__actions .btn {
+      width: 100%;
+    }
+  }
+</style>

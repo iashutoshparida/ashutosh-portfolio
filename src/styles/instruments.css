@@ -1,0 +1,76 @@
+/* Shared instrument frame (COMPONENT_SPEC §3). Radius 0, no shadows, 1px rules. */
+.inst {
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+  padding-block: var(--space-5);
+  margin-block: var(--space-6);
+  display: grid;
+  gap: var(--space-5);
+}
+.inst__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.inst__head-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.inst__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+html:not(.js) .js-only {
+  display: none !important;
+}
+.seg {
+  display: inline-flex;
+  border: var(--rule);
+}
+.seg button {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  background: transparent;
+  color: var(--ink);
+  border: 0;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.seg button + button {
+  border-left: var(--rule);
+}
+.seg button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.seg button:not([aria-pressed='true']):hover {
+  background: var(--paper-deep);
+}
+.inst__caption {
+  font-size: var(--fs-small);
+  color: var(--graphite);
+  max-width: var(--measure);
+}
+.inst__fallback {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--fs-data);
+  text-align: left;
+}
+.inst__fallback th,
+.inst__fallback td {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: var(--rule-soft);
+  vertical-align: top;
+}
